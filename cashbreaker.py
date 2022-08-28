@@ -2,7 +2,10 @@
 
 # To run from command prompt
 #   type 'cmd' in search box in win 10
-#   path
+#   path in quotes "C:\Users\Craig\Google Drive\Programming & Tech\Python\Python Experiments\Cashbreaker"
+#   python cashbreaker.py
+#
+#   cd "C:\Users\Craig\Google Drive\Programming & Tech\Python\Python Experiments\Cashbreaker"
 #   python cashbreaker.py
 
 import os 
@@ -33,7 +36,7 @@ CODE_DICT = None
 PRIZE_WORD = None
 GRID = []
 GIVEN_TUPLE_LIST = []
-cashbreaker_name = '001.txt' 
+cashbreaker_name = '002.txt' 
 file_path = str(pathlib.Path(__file__).parent)
 
 
@@ -121,6 +124,14 @@ def pretty_print_prize_code():
 
     print("")
 
+def pretty_print_unused_letters():
+        unused = string.ascii_uppercase
+        x = ' '.join([letter for letter in unused if letter not in CODE_DICT.values()])
+        
+        print("Unused letters:")
+        print(f"  {x}")
+        print("")
+
 def pretty_print_code():
     key_list = list(CODE_DICT.keys())
     value_list = [str(v) for v in CODE_DICT.values()]
@@ -179,8 +190,10 @@ def main():
         if redraw:
             os.system('cls')
             pretty_print_prize_code()
+            pretty_print_unused_letters()
             pretty_print_code()
             pretty_print_grid()
+
 
 
         # Process input 
@@ -193,10 +206,10 @@ def main():
             redraw = True
 
         elif readline in help_strings:
-            print(f"\tAssign letter to number -> (number)=(letter)")
-            print(f"\tClear screen -> {clear_strings}")
-            print(f"\tReset -> {reset_strings}")
-            print(f"\tClose -> {exit_strings}\n")
+            print(f"  Assign letter to number -> (number)=(letter)")
+            print(f"  Clear screen -> {clear_strings}")
+            print(f"  Reset -> {reset_strings}")
+            print(f"  Close -> {exit_strings}\n")
             redraw = False
 
         elif readline in reset_strings:
@@ -208,10 +221,18 @@ def main():
                 readline = readline.split('=')
                 number, letter = int(readline[0]), readline[1].upper()
 
+                # Only add valid characters
                 if letter in (string.ascii_uppercase + "_"):
-                    CODE_DICT[number] = letter
-                    redraw = True
-    
+                    if letter != "_" and letter in CODE_DICT.values():
+                        print("Letter already in use, please unassign it first '_'\n")
+                        redraw = False
+                    else:
+                        CODE_DICT[number] = letter
+                        redraw = True
+                else:
+                    print("Letter not valid. Please us a-z, A-Z or '_'\n")
+                    redraw = False
+
             except:
                 print("Unrecognized input, type 'help' for more info\n")
                 redraw = False
