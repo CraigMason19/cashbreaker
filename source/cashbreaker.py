@@ -25,10 +25,6 @@ def init_dict(tuple_list):
     # Initial
     for item in tuple_list:
         cd[item[0]] = item[1]
-    # # Initial
-    # cd[2] = 'A'
-    # cd[9] = 'G'
-    # cd[24] = 'N'
 
     return cd
 
@@ -49,8 +45,9 @@ with open(project_path + "/breakers/" + cashbreaker_name, 'r') as f:
     
     # Prize
     prize_block = blocks[1].split('\n')
-    PRIZE_WORD = [int(num_str) for num_str in prize_block[1].split()]
-
+    if len(prize_block) > 1:
+        PRIZE_WORD = [int(num_str) for num_str in prize_block[1].split()]
+        
     # Given
     given_block = blocks[2].split('\n')
     for given in given_block:
@@ -94,13 +91,16 @@ def pretty_print_prize_code():
 
     print("Prize:")
 
-    table_data = [
-        PRIZE_WORD,
-        [str(CODE_DICT[num]) for num in PRIZE_WORD]
-    ]
+    if PRIZE_WORD == None:
+        print("  N/A")
+    else:
+        table_data = [
+            PRIZE_WORD,
+            [str(CODE_DICT[num]) for num in PRIZE_WORD]
+        ]
 
-    for row in table_data:
-        print(("{: >3}" * (len(PRIZE_WORD))).format(*row))
+        for row in table_data:
+            print(("{: >3}" * (len(PRIZE_WORD))).format(*row))
 
     print("")
 
@@ -109,7 +109,12 @@ def pretty_print_unused_letters():
         x = ' '.join([letter for letter in unused if letter not in CODE_DICT.values()])
         
         print("Unused letters:")
-        print(f"  {x}")
+
+        if len(x) == 0:
+            print("  N/A")
+        else:
+            print(f"  {x}")
+        
         print("")
 
 def pretty_print_code():
