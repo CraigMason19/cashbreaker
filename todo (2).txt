@@ -1,8 +1,7 @@
-prize = 'shield'
-save
-
 save guesses
 
 show unused letters
 
 specify grid location and assign that way
+
+put in a class?
