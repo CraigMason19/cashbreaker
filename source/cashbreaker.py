@@ -14,8 +14,32 @@ import string
 
 
 
+class Cashbreaker():
+    def __init__(self, filename):
+        self.filename = filename
+        pass
 
- 
+    def create_from_file():
+        pass
+
+    def save_guesses(self):
+        pass
+
+    def reload(self):
+        pass
+
+    def reset(self):
+        pass 
+
+
+
+
+
+    def __str__(self):
+        pass
+
+    def __repr__(self):
+        pass
  
 
 def init_dict(tuple_list):
