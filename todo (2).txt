@@ -10,4 +10,5 @@ reload
 reload file
 
 fill
-check for words with one option until no words found
+	check for words with one option until no words found	
+	or if a few matches rule out values already in dict
