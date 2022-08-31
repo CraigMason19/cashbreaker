@@ -4,5 +4,19 @@
 			"path": "."
 		}
 	],
-	"settings": {}
+
+	"settings": {
+		//"python.defaultInterpreterPath": "${workspaceFolder}/.env/Scripts/python.exe",
+		"terminal.integrated.env.windows": 
+		{
+			"PYTHONPATH": ".;./source;"
+		},
+							
+
+		"python.autoComplete.extraPaths": [
+			"./source",
+		],
+
+		"python.linting.pylintArgs": ["--init-hook"]
+	},
 }

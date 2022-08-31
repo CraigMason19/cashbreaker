@@ -37,7 +37,7 @@ def words_of_length(length=3):
         return(words)
 
 def potential_words(word):
-    def match(a, b):
+    def is_match(a, b):
         for letter_a, letter_b in zip(a, b):
             if letter_a == '?':
                 continue
@@ -45,6 +45,8 @@ def potential_words(word):
                 return False
 
         return True
+
+    word = word.lower()
 
     with open(filename_sorted) as f:
 
@@ -57,7 +59,7 @@ def potential_words(word):
             letter_count = len(line)
 
             if letter_count == length:
-                if match(word.lower(), line):
+                if is_match(word, line):
                     words.append(line)
                 else:
                     continue

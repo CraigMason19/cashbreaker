@@ -4,7 +4,7 @@ save guesses
 
 specify grid location and assign that way
 
-put in a class?
+ 
 
 reload
 reload file
