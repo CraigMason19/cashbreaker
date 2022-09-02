@@ -10,6 +10,10 @@
 
  
 import string 
+from enum import Enum
+
+class BlockType(Enum):
+    (Comment, Prize, Given, Guess, Grid) = range(5)
 
 class Cashbreaker():
     def __init__(self):
@@ -32,7 +36,7 @@ class Cashbreaker():
             blocks = content.split('\n\n')
             
             # Prize
-            prize_block = blocks[1].split('\n')
+            prize_block = blocks[BlockType.Prize.value].split('\n')
             if len(prize_block) > 1:
                 cb.prize_word = [int(num_str) for num_str in prize_block[1].split()]
                 
@@ -79,6 +83,27 @@ class Cashbreaker():
     def reload(self):
         pass
 
+    def guess(self):
+ 
+
+
+        horizontal_words = []
+
+        # for row in self.grid:
+
+            # for i, square in enumerate(row):
+            #     left_index = i-1
+            #     right_index = i+1
+
+            #     if(left_index < 0):
+            #         continue
+            #     if(right_index > 15-1):
+            #         continue
+
+            #     else:
+            #         if row[left_index] == 0 and row[right_index] != 0:
+            #             horizontal_words.append(object)
+
     def reset_code_dict(self):
         self.code_dict = dict.fromkeys(range(1, 26+1), "_")
         self.code_dict[0] = '■' 
@@ -91,7 +116,7 @@ class Cashbreaker():
         if self.grid == None:
             raise IndexError("Grid has not been set-up")
 
-        return int(self.grid[x-1][y-1])
+        return int(self.grid[y-1][x-1])
 
 
     def __str__(self):

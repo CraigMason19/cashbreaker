@@ -87,6 +87,7 @@ def main():
     clear_strings = ["cls", "clear"]
     reset_strings = ["reset", "r"]
     help_strings = ["help", 'h']
+    guess_strings = ["guess", "g"]
 
     while True:
         if redraw:
@@ -113,6 +114,11 @@ def main():
             print(f"  Reset -> {reset_strings}")
             print(f"  Close -> {exit_strings}\n")
             redraw = False
+
+        elif readline in guess_strings:
+            cb.guess()
+            redraw = True
+
 
         elif readline in reset_strings:
             cb.reset_code_dict()

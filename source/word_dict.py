@@ -69,8 +69,14 @@ def potential_words(word):
 
 
 
-w = words_of_length(4)
+#w = words_of_length(4)
 # print(w)
 
-pw = potential_words("?azelle")
+
+
+
+
+
+
+pw = potential_words("?u??i???c??????????????")
 print(pw)
