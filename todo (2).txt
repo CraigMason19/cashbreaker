@@ -1,13 +1,6 @@
 save guesses
 
- 
 
-specify grid location and assign that way
-
- 
-
-reload
-reload file
 
 fill
 	check for words with one option until no words found	

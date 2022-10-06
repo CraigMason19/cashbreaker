@@ -10,6 +10,7 @@
 
  
 import string 
+import numpy as np
 from enum import Enum
 
 class BlockType(Enum):
@@ -67,13 +68,15 @@ class Cashbreaker():
 
             # Grid
             grid_block = blocks[4].split('\n')
-            cb.grid = []
+            grid_array = []
 
             for line in grid_block:
                 if line[0] == '#' or line[0] =='':
                     continue
                 else:
-                    cb.grid.append([int(num_str) for num_str in line.split()])
+                    grid_array.append([int(num_str) for num_str in line.split()])
+            
+            cb.grid = np.array(grid_array)
 
         return cb
 
@@ -113,10 +116,8 @@ class Cashbreaker():
                 self.code_dict[item[0]] = item[1]
 
     def get_grid_number(self, x, y):
-        if self.grid == None:
-            raise IndexError("Grid has not been set-up")
-
-        return int(self.grid[y-1][x-1])
+        x = self.grid[x-1][y-1]
+        return int(x)
 
 
     def __str__(self):

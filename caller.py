@@ -2,84 +2,15 @@ import os
 import pathlib
 import string
 
+import numpy as np
+
 from cashbreaker import Cashbreaker
-
-
-
-# region pretty printing
-def pretty_print_prize_code(cashbreaker):
-    print("Prize:")
-
-    if cashbreaker.prize_word == None:
-        print("  N/A")
-    else:
-        table_data = [
-            cashbreaker.prize_word,
-            [str(cashbreaker.code_dict[num]) for num in cashbreaker.prize_word]
-        ]
-
-        for row in table_data:
-            print(("{: >3}" * (len(cashbreaker.prize_word))).format(*row))
-
-    print("")
-
-def pretty_print_unused_letters(cashbreaker):
-        unused = string.ascii_uppercase
-        x = ' '.join([letter for letter in unused if letter not in cashbreaker.code_dict.values()])
-        
-        print("Unused letters:")
-
-        if len(x) == 0:
-            print("  N/A")
-        else:
-            print(f"  {x}")
-        
-        print("")
-
-def pretty_print_code(cashbreaker):
-    key_list = list(cashbreaker.code_dict.keys())
-    value_list = [str(v) for v in cashbreaker.code_dict.values()]
-
-    table_data = [
-        key_list[0:13],
-        value_list[0:13],
-
-        ["" for i in range(1, 13+1)],
-
-        key_list[13:],
-        value_list[13:],
-    ]
-
-    print("Code Table:")
-
-    for row in table_data:
-        print(("{: >3}" * 13).format(*row))
-
-    print("")
-
-def pretty_print_grid(cashbreaker, grid_width=15):
-    table_data = [
-        [""] + [f"{i:02d}" for i in range(1, grid_width+1)], # plus 1 for last number = 1 for extra colum for row num
-        [" "] + ["___" for i in range(1, grid_width+1)],
-    ]
-
-    for i, l in enumerate(cashbreaker.grid):
-        table_data.append([f"{i+1:02d}|"] + [str(cashbreaker.code_dict[num]) for num in l])
-
-    print("Grid:")
-
-    for row in table_data:
-        print(("{: >3}" * (grid_width+1)).format(*row))
-
-    print("")
-#endregion
-
-
-
+from printing import pretty_print_cashbreaker
 
 def main():
+    breaker_name = "003.txt"
     project_path = str(pathlib.Path(__file__).parent)
-    cb = Cashbreaker.from_file(project_path + "\\breakers\\" + "003.txt")
+    cb = Cashbreaker.from_file(project_path + "\\breakers\\" + breaker_name)
 
     redraw = True
  
@@ -88,16 +19,12 @@ def main():
     reset_strings = ["reset", "r"]
     help_strings = ["help", 'h']
     guess_strings = ["guess", "g"]
+    reload_strings = ["reload"]
 
     while True:
         if redraw:
             os.system('cls')
-            pretty_print_prize_code(cb)
-            pretty_print_unused_letters(cb)
-            pretty_print_code(cb)
-            pretty_print_grid(cb)
-
-
+            pretty_print_cashbreaker(cb)
 
         # Process input 
         readline = input().lower()
@@ -106,6 +33,10 @@ def main():
             break
         
         if readline in clear_strings:
+            redraw = True
+
+        if readline in reload_strings:
+            cb = Cashbreaker.from_file(project_path + "\\breakers\\" + breaker_name)
             redraw = True
 
         elif readline in help_strings:
@@ -133,8 +64,12 @@ def main():
 
                 #1,1=s
                 if ',' in readline[0]:
-                    grid_ref = readline[0].split(',')
-                    number = cb.get_grid_number(int(grid_ref[0]), int(grid_ref[1]))
+                    grid_ref = [int(index) for index in readline[0].split(',')]
+
+                    # check in range
+                    if 0 <= grid_ref[0] <= cb.grid.shape[0]:
+                        if 0 <= grid_ref[1] <= cb.grid.shape[1]:
+                            number = cb.get_grid_number(grid_ref[0], grid_ref[1])
                 else:
                     number = int(readline[0])
 

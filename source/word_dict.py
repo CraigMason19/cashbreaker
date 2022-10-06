@@ -6,6 +6,7 @@ dict_name = 'en_dic'
 filename = path_name + '/' + dict_name + '.txt'
 filename_sorted = path_name + '/' + dict_name + '_sorted.txt'
 
+GUESS_CHAACTERS = '?-_.' # guess cahracters e. ?x-
 
 def create_sorted_dict():
     lines = None
@@ -39,7 +40,7 @@ def words_of_length(length=3):
 def potential_words(word):
     def is_match(a, b):
         for letter_a, letter_b in zip(a, b):
-            if letter_a == '?':
+            if letter_a in GUESS_CHAACTERS:
                 continue
             elif letter_a != letter_b:
                 return False
@@ -76,7 +77,7 @@ def potential_words(word):
 
 
 
-
-
-pw = potential_words("?u??i???c??????????????")
+# add ignor letters as string e..g 'abscl'
+# guess cahracters e. ?x-
+pw = potential_words("t??ne")
 print(pw)
