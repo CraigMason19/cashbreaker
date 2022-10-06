@@ -3,28 +3,31 @@ import os
 path_name = os.path.dirname(__file__)
 dict_name = 'en_dic'
 
-filename = path_name + '/' + dict_name + '.txt'
-filename_sorted = path_name + '/' + dict_name + '_sorted.txt'
+FILENAME = path_name + '/' + dict_name + '.txt'
+FILENAME_SORTED = path_name + '/' + dict_name + '_sorted.txt'
 
-GUESS_CHAACTERS = '?-_.' # guess cahracters e. ?x-
+MISSING_CHARACTERS = '?-_.' # guess cahracters e.g. s?a_d -> salad
 
+
+#region I/O Dictionary
 def create_sorted_dict():
     lines = None
 
-    with open(filename) as f:
+    with open(FILENAME) as f:
         lines = f.readlines()
         lines.sort(key=lambda item: (len(item), item))
     
-    with open(filename_sorted, 'w+') as f:
+    with open(FILENAME_SORTED, 'w+') as f:
         for line in lines:
             f.write(line)
 
+#endregion
         
 def words_of_length(length=3):
     if length < 0:
         return []
 
-    with open(filename_sorted) as f:
+    with open(FILENAME_SORTED) as f:
         words = []
         letter_count = 0
         
@@ -37,11 +40,20 @@ def words_of_length(length=3):
 
         return(words)
 
-def potential_words(word):
-    def is_match(a, b):
-        for letter_a, letter_b in zip(a, b):
-            if letter_a in GUESS_CHAACTERS:
+def potential_words(word, ignore_letters=''):
+    def is_match(word_a, word_b, ignore_letters=''):
+        ''' Compare each letter in each word '''
+
+        for letter_a, letter_b in zip(word_a, word_b):
+            # Letter in second word is not allowed
+            if letter_b in ignore_letters:
+                return False
+
+            # Unknown letter, go to the next
+            elif letter_a in MISSING_CHARACTERS:
                 continue
+
+            # Doesn't fit
             elif letter_a != letter_b:
                 return False
 
@@ -49,18 +61,15 @@ def potential_words(word):
 
     word = word.lower()
 
-    with open(filename_sorted) as f:
+    with open(FILENAME_SORTED) as f:
+        letter_count, words = 0, []
 
-        letter_count = 0
-        length = len(word)
-        words = []
-
-        while letter_count <= length:
+        while letter_count <= len(word):
             line = f.readline().strip().lower()
             letter_count = len(line)
 
-            if letter_count == length:
-                if is_match(word, line):
+            if letter_count == len(word):
+                if is_match(word, line, ignore_letters):
                     words.append(line)
                 else:
                     continue
@@ -69,15 +78,16 @@ def potential_words(word):
 
 
 
+def main():
+    # create_sorted_dict()
+    
+    # wol = words_of_length(4)
+    # print(wol)
 
-#w = words_of_length(4)
-# print(w)
+    pw = potential_words("t?ine")
+    pw2 = potential_words("t?ine", 'w')
+    print(pw)
+    print(pw2)
 
-
-
-
-
-# add ignor letters as string e..g 'abscl'
-# guess cahracters e. ?x-
-pw = potential_words("t??ne")
-print(pw)
+if __name__ == '__main__':
+    main()
