@@ -21,6 +21,10 @@ def create_sorted_dict():
         for line in lines:
             f.write(line)
 
+def word_count_in_dic():
+    with open(FILENAME) as f:
+        lines = f.readlines()
+        return len(lines)
 #endregion
         
 def words_of_length(length=3):
@@ -40,9 +44,14 @@ def words_of_length(length=3):
 
         return(words)
 
-def potential_words(word, ignore_letters=''):
-    def is_match(word_a, word_b, ignore_letters=''):
+def potential_words(word, ignore_letters='', required_letters=''):
+    def is_match(word_a, word_b, ignore_letters='', required_letters=''):
         ''' Compare each letter in each word '''
+
+
+        for rl in required_letters:
+            if rl not in word_b:
+                return False
 
         for letter_a, letter_b in zip(word_a, word_b):
             # Letter in second word is not allowed
@@ -60,6 +69,7 @@ def potential_words(word, ignore_letters=''):
         return True
 
     word = word.lower()
+    ignore_letters, required_letters = ignore_letters.lower(), required_letters.lower()
 
     with open(FILENAME_SORTED) as f:
         letter_count, words = 0, []
@@ -69,7 +79,7 @@ def potential_words(word, ignore_letters=''):
             letter_count = len(line)
 
             if letter_count == len(word):
-                if is_match(word, line, ignore_letters):
+                if is_match(word, line, ignore_letters, required_letters):
                     words.append(line)
                 else:
                     continue
@@ -80,13 +90,19 @@ def potential_words(word, ignore_letters=''):
 
 def main():
     # create_sorted_dict()
-    
+
+    print(word_count_in_dic()) # 194433
+
     # wol = words_of_length(4)
     # print(wol)
 
-    pw = potential_words("t?ine")
-    pw2 = potential_words("t?ine", 'w')
-    print(pw)
+
+    word = 'ste?n' # stern
+
+    # pw = potential_words(word)
+    # print(pw) 
+
+    pw2 = potential_words(word, 'r', '')
     print(pw2)
 
 if __name__ == '__main__':

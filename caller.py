@@ -8,7 +8,7 @@ from cashbreaker import Cashbreaker
 from printing import pretty_print_cashbreaker
 
 def main():
-    breaker_name = "003.txt"
+    breaker_name = "004.txt"
     project_path = str(pathlib.Path(__file__).parent)
     cb = Cashbreaker.from_file(project_path + "\\breakers\\" + breaker_name)
 

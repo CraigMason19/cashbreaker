@@ -1,7 +1,17 @@
 save guesses
 
-
+cashbreaker
+	d = {2:'a', 3:'b', 4:'s'}
+	ignore_letters = ''.join([value for key, value in d.items()])
+	sent ignore letters string to words.py
 
 fill
 	check for words with one option until no words found	
 	or if a few matches rule out values already in dict
+
+
+en_words.py
+	- in potential words
+		- double letters?
+		- letters in correct but not in right place
+		- put in woordle.py
