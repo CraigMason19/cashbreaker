@@ -25,8 +25,12 @@ def word_count_in_dic():
     with open(FILENAME) as f:
         lines = f.readlines()
         return len(lines)
-#endregion
-        
+    
+def all_unsorted_words():
+    with open(FILENAME) as f:
+        lines = f.read().lower().splitlines()
+        return lines
+
 def words_of_length(length=3):
     if length < 0:
         return []
@@ -43,6 +47,8 @@ def words_of_length(length=3):
                 words.append(line)
 
         return(words)
+
+#endregion
 
 def potential_words(word, ignore_letters='', required_letters=''):
     def is_match(word_a, word_b, ignore_letters='', required_letters=''):
@@ -86,24 +92,80 @@ def potential_words(word, ignore_letters='', required_letters=''):
 
         return words
 
+def words_from_letters(letters, min_len=3, max_len=6, remove_doubles=False):
+    def foo(letters, word, remove_doubles=False):
+        if remove_doubles:
+            if len(set(word)) != len(word):
+                return False
 
+        for letter in word:
+            if letter not in letters:
+                return False
+            
+        return True
+
+    letters = letters.lower()    
+    l = []
+
+    if max_len == None:
+        l = [word for word in all_unsorted_words() if foo(letters, word, remove_doubles)]
+        l.sort(key=lambda s: len(s))        
+
+    else:
+        for i in range(min_len, max_len+1):
+            for word in words_of_length(i):
+                if foo(letters, word, remove_doubles):
+                    l.append(word)
+
+    return(l)
+
+
+#region word_games
+
+def spelling_bee(inner_letter, outer_letters):
+    ''' https://spellingbeegame.org '''
+    def contains_central_letter(word):
+        # return word.find(inner_letter.lower()) == 1
+        return (inner_letter.lower() in word)
+
+    letters = outer_letters.lower() + inner_letter.lower()
+    
+    sb = words_from_letters(letters, min_len=4, max_len=None, remove_doubles=False)
+    sb = [word for word in sb if contains_central_letter(word)]
+
+    print(f'Spelling Bee: ({inner_letter.lower()}, {outer_letters.lower()}), count: {len(sb)}')
+    print(sb)
+    print("")
+
+def wordle():
+    ''' https://www.nytimes.com/games/wordle/index.html '''
+
+    word = 'exi??'
+    ignore = ''
+    include = ''
+
+    words = potential_words(word, ignore, include)
+    print(f'Wordle: {word}, count: {len(words)}')
+    print(words)
+    print()
+
+#endregion
+
+def play_games():
+    spelling_bee('f', 'eltbad')
+    wordle()
 
 def main():
     # create_sorted_dict()
 
     print(word_count_in_dic()) # 194433
 
+ 
     # wol = words_of_length(4)
     # print(wol)
 
 
-    word = 'ste?n' # stern
-
-    # pw = potential_words(word)
-    # print(pw) 
-
-    pw2 = potential_words(word, 'r', '')
-    print(pw2)
+    play_games() 
 
 if __name__ == '__main__':
     main()
