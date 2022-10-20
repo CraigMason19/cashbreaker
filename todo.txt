@@ -1,6 +1,10 @@
 save guesses
 
 cashbreaker
+	make unused letters part of class?
+	make elimination algorithm
+	call find words once at start
+	move asssignment to cashbreaker class
 	d = {2:'a', 3:'b', 4:'s'}
 	ignore_letters = ''.join([value for key, value in d.items()])
 	sent ignore letters string to words.py

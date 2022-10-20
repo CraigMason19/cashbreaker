@@ -8,7 +8,7 @@ from cashbreaker import Cashbreaker
 from printing import pretty_print_cashbreaker
 
 def main():
-    breaker_name = "004.txt"
+    breaker_name = "003.txt"
     project_path = str(pathlib.Path(__file__).parent)
     cb = Cashbreaker.from_file(project_path + "\\breakers\\" + breaker_name)
 
@@ -47,8 +47,17 @@ def main():
             redraw = False
 
         elif readline in guess_strings:
-            cb.guess()
-            redraw = True
+            if cb.is_complete():
+                print("Cashbreaker is complete!\n")
+                redraw = False
+            else:
+                if(cb.guess()):
+                    redraw = True
+                else:
+                    print("No definite answers found\n")
+                    redraw = False
+
+
 
 
         elif readline in reset_strings:

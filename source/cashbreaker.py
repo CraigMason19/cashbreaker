@@ -13,6 +13,18 @@ import string
 import numpy as np
 from enum import Enum
 
+import en_words
+
+def array_split(sequence, seperators=[0]):
+    chunk = []
+    for val in sequence:
+        if val in seperators:
+            yield chunk
+            chunk = []
+        else:
+            chunk.append(val)
+    yield chunk
+
 class BlockType(Enum):
     (Comment, Prize, Given, Guess, Grid) = range(5)
 
@@ -80,32 +92,76 @@ class Cashbreaker():
 
         return cb
 
+    def is_complete(self):
+        return '_' not in self.code_dict.values()
+
     def save_guesses(self):
         pass
 
     def reload(self):
         pass
 
+    def find_words_gen(self):
+        for line in self.grid:
+            for word in array_split(line):
+                if len(word) < 2:
+                    continue
+                else:
+                    yield word
+
+        for line in self.grid.T:
+            for word in array_split(line):
+                if len(word) < 2:
+                    continue
+                else:
+                    yield word
+                    # yield ''.join([self.code_dict[letter] for letter in word])
+
     def guess(self):
  
+        # No words to find
+        if self.is_complete():
+            return False
 
 
-        horizontal_words = []
+        words_found = False
+ 
 
-        # for row in self.grid:
+ 
+        x = self.find_words_gen()
+        # go through all words
+        # check if there is only one option for word
+ 
+        for word in x:
+            # tmp = # MAKE WORK ???????
+            # if en_words.potential_words(word)
+            
+            alpha_word = [self.code_dict[letter] for letter in word]
 
-            # for i, square in enumerate(row):
-            #     left_index = i-1
-            #     right_index = i+1
+            # Already solved
+            if '_' not in alpha_word:
+                continue
 
-            #     if(left_index < 0):
-            #         continue
-            #     if(right_index > 15-1):
-            #         continue
+            result = en_words.potential_words(''.join(alpha_word)) 
+            # if missing letter already in dict
+            # gazelle, #gabelle
 
-            #     else:
-            #         if row[left_index] == 0 and row[right_index] != 0:
-            #             horizontal_words.append(object)
+            # Success!
+            if len(result) == 1:
+                # print(result[0])
+                 
+                for i, code in enumerate(word):
+                    self.code_dict[code] = result[0][i].upper()
+                    words_found = True
+
+                self.guess()
+
+        # print("no more matches")
+        a=10
+        ## if not return string (no certain guesses)
+
+        return words_found
+
 
     def reset_code_dict(self):
         self.code_dict = dict.fromkeys(range(1, 26+1), "_")
