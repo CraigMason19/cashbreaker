@@ -118,24 +118,21 @@ class Cashbreaker():
                     # yield ''.join([self.code_dict[letter] for letter in word])
 
     def guess(self):
- 
+        ''' Try to guess words '''
         # No words to find
         if self.is_complete():
             return False
 
-
         words_found = False
  
+ 
+        #TODO - go through all words. find at the start for speed
+        # _build_word_lists
+        x = self.find_words_gen()
+        
 
  
-        x = self.find_words_gen()
-        # go through all words
-        # check if there is only one option for word
- 
         for numeric_word in x:
-            # tmp = # MAKE WORK ???????
-            # if en_words.potential_words(word)
-            
             alpha_word = [self.code_dict[letter] for letter in numeric_word]
 
             # Already solved
@@ -145,34 +142,19 @@ class Cashbreaker():
             # Get all potential matches
             result = en_words.potential_words(''.join(alpha_word)) 
  
-
-            tmp = []
-            for word in result:
-                for letter in word.upper():
-                    if letter not in self.code_dict.values():
-                        tmp.append(word)
-                        break
-            
-            result = tmp
-
-            # if missing letter already in dict
-            # gazelle, #gabelle
-
-
+            # For each potential match, only allow words with letterns not in the code_dict
+            result = [word for word in result if any(letter not in self.code_dict.values() for letter in word.upper())]
 
             # Success!
             if len(result) == 1:
-                # print(result[0])
-                 
+                words_found = True
+                
+                # Update all letters in the dict
+                # TODO only update missing letters?
                 for i, code in enumerate(numeric_word):
-                    self.code_dict[code] = result[0][i].upper()
-                    words_found = True
+                    self.code_dict[code] = result[0][i].upper()                     
 
                 self.guess()
-
-        # print("no more matches")
-        a=10
-        ## if not return string (no certain guesses)
 
         return words_found
 
