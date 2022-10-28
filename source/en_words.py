@@ -31,6 +31,11 @@ def all_unsorted_words():
         lines = f.read().lower().splitlines()
         return lines
 
+def all_sorted_words():
+    with open(FILENAME_SORTED) as f:
+        lines = f.read().lower().splitlines()
+        return lines
+
 def words_of_length(length=3):
     if length < 0:
         return []

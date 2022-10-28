@@ -132,25 +132,39 @@ class Cashbreaker():
         # go through all words
         # check if there is only one option for word
  
-        for word in x:
+        for numeric_word in x:
             # tmp = # MAKE WORK ???????
             # if en_words.potential_words(word)
             
-            alpha_word = [self.code_dict[letter] for letter in word]
+            alpha_word = [self.code_dict[letter] for letter in numeric_word]
 
             # Already solved
             if '_' not in alpha_word:
                 continue
 
+            # Get all potential matches
             result = en_words.potential_words(''.join(alpha_word)) 
+ 
+
+            tmp = []
+            for word in result:
+                for letter in word.upper():
+                    if letter not in self.code_dict.values():
+                        tmp.append(word)
+                        break
+            
+            result = tmp
+
             # if missing letter already in dict
             # gazelle, #gabelle
+
+
 
             # Success!
             if len(result) == 1:
                 # print(result[0])
                  
-                for i, code in enumerate(word):
+                for i, code in enumerate(numeric_word):
                     self.code_dict[code] = result[0][i].upper()
                     words_found = True
 

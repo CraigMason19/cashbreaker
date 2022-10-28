@@ -4,6 +4,8 @@ cashbreaker
 	make unused letters part of class?
 	make elimination algorithm
 	call find words once at start
+		def do(word_list)		
+
 	move asssignment to cashbreaker class
 	d = {2:'a', 3:'b', 4:'s'}
 	ignore_letters = ''.join([value for key, value in d.items()])
@@ -17,5 +19,3 @@ fill
 en_words.py
 	- in potential words
 		- double letters?
-		- letters in correct but not in right place
-		- put in woordle.py
