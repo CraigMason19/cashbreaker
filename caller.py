@@ -57,6 +57,9 @@ def main():
                     print("No definite answers found\n")
                     redraw = False
 
+        elif readline == 'repr':
+            print(f'__repr__ == {cb}\n')
+            redraw = False
 
 
 

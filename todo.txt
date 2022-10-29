@@ -4,23 +4,28 @@ caller
 	commands
 		Save guesses
 		full_guess / full / all_words -> print a list of all the potential words for each word 
+		
+		cls doesnt work
+
+		BUG!!!!
+			100,100=_
+			Index out of greater range: (100, 100)
+			Can't assign to empty space
+
+		
 
 cashbreaker
-	make unused letters part of class?
-	make elimination algorithm
 	call find words once at start
 		def do(word_list)		
 
 	move asssignment to cashbreaker class
 	d = {2:'a', 3:'b', 4:'s'}
 
-
-
 en_words.py
 	- in potential words
 		- double letters?
 
 	load letters once
-	raiser errors if dicnot found
+	raiser errors if dic not found
 	us and uk dicts
-		where to find good ones
+		where to find good ones online?

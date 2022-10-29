@@ -8,7 +8,7 @@
 #   cd "C:\Users\Craig\Google Drive\Programming & Tech\Python\Python Experiments\Cashbreaker"
 #   python cashbreaker.py
 
- 
+import os
 import string 
 import numpy as np
 from enum import Enum
@@ -96,6 +96,10 @@ class Cashbreaker():
         return cb
 
     #region properties
+
+    @property
+    def code_dict_letters(self):
+        return ''.join([letter for letter in self.code_dict.values() if letter in string.ascii_uppercase])
 
     @property
     def unused_letters(self):
@@ -186,7 +190,12 @@ class Cashbreaker():
     def __repr__(self):
         ''' __str__ not defined will use this __repr__ '''
         # Cashbreaker('breakers/004.txt, (15,15) code_dict='abcdefeesff')
-        pass
+
+        breaker_name = os.path.basename(self.filename)
+        status = 'Complete' if self.is_complete else 'Incomplete'
+        
+        return f'Cashbreaker({breaker_name}, {self.grid.T.shape}, {self.code_dict_letters}, {status})'
+        
  
 
 
