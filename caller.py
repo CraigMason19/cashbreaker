@@ -20,6 +20,7 @@ def main():
     help_strings = ["help", 'h']
     guess_strings = ["guess", "g"]
     reload_strings = ["reload"]
+    repr_strings = ["repr"]
 
     while True:
         if redraw:
@@ -32,18 +33,25 @@ def main():
         if readline in exit_strings:
             break
         
-        if readline in clear_strings:
+        elif readline in clear_strings:
             redraw = True
 
-        if readline in reload_strings:
+        elif readline in reload_strings:
             cb = Cashbreaker.from_file(project_path + "\\breakers\\" + breaker_name)
             redraw = True
 
         elif readline in help_strings:
             print(f"  Assign letter to number -> (number)=(letter)")
+            print(f"  Assign letter to location -> (x),(y)=(letter)")
+            print("")
+            print(f"  Exit -> {exit_strings}")
             print(f"  Clear screen -> {clear_strings}")
             print(f"  Reset -> {reset_strings}")
-            print(f"  Close -> {exit_strings}\n")
+            print(f"  Close -> {exit_strings}")
+            print(f"  Guess words -> {guess_strings}")
+            print(f"  Reload -> {reload_strings}")
+            print(f"  Show representation -> {repr_strings}")
+            print("\n")
             redraw = False
 
         elif readline in guess_strings:
@@ -57,7 +65,7 @@ def main():
                     print("No definite answers found\n")
                     redraw = False
 
-        elif readline == 'repr':
+        elif readline in repr_strings:
             print(f'__repr__ == {cb}\n')
             redraw = False
 
@@ -92,7 +100,7 @@ def main():
                         print("Can't assign to empty space\n")
                         redraw = False
 
-                    elif letter != "_" and letter in cb.code_dict.values():
+                    elif letter != "_" and letter in cb.code_dict_letters:
                         print("Letter already in use, please unassign it first '_'\n")
                         redraw = False
                     else:

@@ -5,7 +5,7 @@ caller
 		Save guesses
 		full_guess / full / all_words -> print a list of all the potential words for each word 
 		
-		cls doesnt work
+ 
 
 		BUG!!!!
 			100,100=_
