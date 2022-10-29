@@ -103,11 +103,28 @@ class Cashbreaker():
 
     @property
     def unused_letters(self):
-        unused = string.ascii_uppercase
-        return ' '.join([letter for letter in unused if letter not in self.code_dict.values()])
+        """ Returns a string of all letters not used in the code dictionary.
+
+        Args:
+            None.
+
+        Returns:
+            A string of all unused letters.
+        """
+        return ''.join([c for c in string.ascii_uppercase if c not in self.code_dict_letters])
 
     @property
     def is_complete(self):
+        """ Returns a bool representing if the cashbreaker is complete or not.
+        
+        Complete is when every key in the code dictionary has a unique letter.
+
+        Args:
+            None.
+
+        Returns:
+            True if cashbreaker is complete, false otherwise.
+        """
         return '_' not in self.code_dict.values()
 
     #endregion
@@ -185,12 +202,23 @@ class Cashbreaker():
         elif x > inverted_shape[0] or y > inverted_shape[1]:
             raise IndexError(f"Index out of greater range: {x, y}")
 
-        return int(self.grid[y-1, x-1]) # numpy is not 'along the corridor and up the stairs'
+        # numpy is not 'along the corridor and up the stairs'
+        return int(self.grid[y-1, x-1]) 
 
     def __repr__(self):
-        ''' __str__ not defined will use this __repr__ '''
-        # Cashbreaker('breakers/004.txt, (15,15) code_dict='abcdefeesff')
+        """ Returns a string representing the cashbreaker. 
+        
+            NOTE: __str__ is not defined so __repr__ wil be used on str methods.
 
+            Returns a string in the format 'Cashbreaker(name, shape, letters, status)
+            e.g. 'Cashbreaker('001.txt', (15, 15), 'WAY', Incomplete)'
+
+        Args:
+            None.
+
+        Returns:
+            A string representing the cashbreaker.
+        """
         breaker_name = os.path.basename(self.filename)
         status = 'Complete' if self.is_complete else 'Incomplete'
         
