@@ -107,22 +107,13 @@ class Cashbreaker():
     def find_numeric_words(self):
         numeric_words = []
 
-        for line in self.grid:
+        # Loop through rows and columns at the same time
+        for line in [*self.grid, *self.grid.T]:
             for word in array_split(line):
-                if len(word) < 2:
-                    continue
-                else:
+                if len(word) > 2:
                     numeric_words.append(word)
 
-        for line in self.grid.T:
-            for word in array_split(line):
-                if len(word) < 2:
-                    continue
-                else:
-                    numeric_words.append(word)
-
-        return numeric_words
-        
+        return numeric_words       
 
     def guess(self):
         ''' Try to guess words '''
@@ -131,14 +122,7 @@ class Cashbreaker():
             return False
 
         words_found = False
- 
- 
-        #TODO - go through all words. find at the start for speed
-        # _build_word_lists
-        # x = self.find_words_gen()
-        
-        x = self.find_numeric_words()
- 
+  
         for numeric_word in self.find_numeric_words():
             alpha_word = [self.code_dict[letter] for letter in numeric_word]
 
