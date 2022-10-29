@@ -18,9 +18,11 @@ def pretty_print_prize_code(cashbreaker):
     print("")
 
 def pretty_print_unused_letters(cashbreaker):
-        unused = string.ascii_uppercase
-        x = ' '.join([letter for letter in unused if letter not in cashbreaker.code_dict.values()])
+        # unused = string.ascii_uppercase
+        # x = ' '.join([letter for letter in unused if letter not in cashbreaker.code_dict.values()])
         
+        x = cashbreaker.unused_letters
+
         print("Unused letters:")
 
         if len(x) == 0:

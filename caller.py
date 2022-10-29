@@ -47,7 +47,7 @@ def main():
             redraw = False
 
         elif readline in guess_strings:
-            if cb.is_complete():
+            if cb.is_complete:
                 print("Cashbreaker is complete!\n")
                 redraw = False
             else:
@@ -73,12 +73,12 @@ def main():
 
                 #1,1=s
                 if ',' in readline[0]:
-                    grid_ref = [int(index) for index in readline[0].split(',')]
+                    loc = [int(index) for index in readline[0].split(',')]
 
-                    # check in range
-                    if 0 <= grid_ref[0] <= cb.grid.shape[0]:
-                        if 0 <= grid_ref[1] <= cb.grid.shape[1]:
-                            number = cb.get_grid_number(grid_ref[0], grid_ref[1])
+                    try:
+                        number = cb.get_grid_number(loc[0], loc[1])
+                    except IndexError as e:
+                        print(str(e))
                 else:
                     number = int(readline[0])
 

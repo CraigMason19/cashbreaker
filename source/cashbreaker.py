@@ -95,8 +95,21 @@ class Cashbreaker():
 
         return cb
 
+    #region properties
+
+    @property
+    def unused_letters(self):
+        unused = string.ascii_uppercase
+        return ' '.join([letter for letter in unused if letter not in self.code_dict.values()])
+
+    @property
     def is_complete(self):
         return '_' not in self.code_dict.values()
+
+    #endregion
+
+
+
 
     def save_guesses(self):
         pass
@@ -118,7 +131,7 @@ class Cashbreaker():
     def guess(self):
         ''' Try to guess words '''
         # No words to find
-        if self.is_complete():
+        if self.is_complete:
             return False
 
         words_found = False
@@ -158,15 +171,21 @@ class Cashbreaker():
             for item in self.given_tuple_list:
                 self.code_dict[item[0]] = item[1]
 
+
     def get_grid_number(self, x, y):
-        x = self.grid[x-1][y-1]
-        return int(x)
+        inverted_shape = self.grid.shape[::-1]
 
+        if x < 1 or y < 1:
+            raise IndexError(f"Index out of lesser range: {x, y}")
+    
+        elif x > inverted_shape[0] or y > inverted_shape[1]:
+            raise IndexError(f"Index out of greater range: {x, y}")
 
-    def __str__(self):
-        pass
+        return int(self.grid[y-1, x-1]) # numpy is not 'along the corridor and up the stairs'
 
     def __repr__(self):
+        ''' __str__ not defined will use this __repr__ '''
+        # Cashbreaker('breakers/004.txt, (15,15) code_dict='abcdefeesff')
         pass
  
 
