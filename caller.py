@@ -5,7 +5,7 @@ import string
 import numpy as np
 
 from cashbreaker import Cashbreaker
-from printing import pretty_print_cashbreaker
+from printing import print_cashbreaker
 
 def main():
     breaker_name = "001.txt"
@@ -18,14 +18,14 @@ def main():
     clear_strings = ["cls", "clear"]
     reset_strings = ["reset", "r"]
     help_strings = ["help", 'h']
-    guess_strings = ["guess", "g"]
+    guess_strings = ["guess", "g", "fill", 'f']
     reload_strings = ["reload"]
     repr_strings = ["repr"]
 
     while True:
         if redraw:
             os.system('cls')
-            pretty_print_cashbreaker(cb)
+            print_cashbreaker(cb)
 
         # Process input 
         readline = input().lower()
@@ -69,8 +69,6 @@ def main():
             print(f'__repr__ == {cb}\n')
             redraw = False
 
-
-
         elif readline in reset_strings:
             cb.reset_code_dict()
             redraw = True
@@ -81,34 +79,40 @@ def main():
 
                 number = 0
                 letter = readline[1].upper()
+                parse_success = True
 
-                #1,1=s
+                # e.g. 1,1=s
                 if ',' in readline[0]:
                     loc = [int(index) for index in readline[0].split(',')]
 
                     try:
                         number = cb.get_grid_number(loc[0], loc[1])
+
                     except IndexError as e:
-                        print(str(e))
+                        print(str(e) + "\n")
+                        parse_success = False
+                        redraw = False
+
+                # e.g. 1=g
                 else:
                     number = int(readline[0])
 
+                if(parse_success):
+                    # Only add valid characters
+                    if letter in (string.ascii_uppercase + "_"):
+                        if number == 0:
+                            print("Can't assign to empty space\n")
+                            redraw = False
 
-                # Only add valid characters
-                if letter in (string.ascii_uppercase + "_"):
-                    if number == 0:
-                        print("Can't assign to empty space\n")
-                        redraw = False
-
-                    elif letter != "_" and letter in cb.code_dict_letters:
-                        print("Letter already in use, please unassign it first '_'\n")
-                        redraw = False
+                        elif letter != "_" and letter in cb.code_dict_letters:
+                            print("Letter already in use, please unassign it first '_'\n")
+                            redraw = False
+                        else:
+                            cb.code_dict[number] = letter
+                            redraw = True
                     else:
-                        cb.code_dict[number] = letter
-                        redraw = True
-                else:
-                    print("Letter not valid. Please us a-z, A-Z or '_'\n")
-                    redraw = False
+                        print("Letter not valid. Please us a-z, A-Z or '_'\n")
+                        redraw = False
 
             except:
                 print("Unrecognized input, type 'help' for more info\n")

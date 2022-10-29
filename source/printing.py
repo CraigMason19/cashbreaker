@@ -1,7 +1,8 @@
 import string
 
 # region pretty printing
-def pretty_print_prize_code(cashbreaker):
+
+def print_prize_code(cashbreaker):
     print("Prize:")
 
     if cashbreaker.prize_word == None:
@@ -17,7 +18,7 @@ def pretty_print_prize_code(cashbreaker):
 
     print("")
 
-def pretty_print_unused_letters(cashbreaker):
+def print_unused_letters(cashbreaker):
         print("Unused letters:")
 
         if len(cashbreaker.unused_letters) == 0:
@@ -27,7 +28,7 @@ def pretty_print_unused_letters(cashbreaker):
         
         print("")
 
-def pretty_print_code(cashbreaker):
+def print_code(cashbreaker):
     key_list = list(cashbreaker.code_dict.keys())
     value_list = [str(v) for v in cashbreaker.code_dict.values()]
 
@@ -48,7 +49,7 @@ def pretty_print_code(cashbreaker):
 
     print("")
 
-def pretty_print_grid(cashbreaker):
+def print_grid(cashbreaker):
     x, y = cashbreaker.grid.shape
 
     table_data = [
@@ -66,10 +67,10 @@ def pretty_print_grid(cashbreaker):
 
     print("")
 
-def pretty_print_cashbreaker(cb):
-    pretty_print_prize_code(cb)  
-    pretty_print_unused_letters(cb)
-    pretty_print_code(cb)
-    pretty_print_grid(cb)
+def print_cashbreaker(cb):
+    print_prize_code(cb)  
+    print_unused_letters(cb)
+    print_code(cb)
+    print_grid(cb)
 
 #endregion

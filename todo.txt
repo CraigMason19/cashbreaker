@@ -1,4 +1,5 @@
-save guesses
+test empty cash breaker
+	repr
 
 caller
 	commands
@@ -16,12 +17,10 @@ caller
 
 cashbreaker
 	use code_dict_letters property over the place
+		- rename code_dict_letters to used letters???
 
 	call find words once at start
 		def do(word_list)		
-
-	move asssignment to cashbreaker class
-	d = {2:'a', 3:'b', 4:'s'}
 
 en_words.py
 	- in potential words

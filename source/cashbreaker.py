@@ -99,7 +99,16 @@ class Cashbreaker():
 
     @property
     def code_dict_letters(self):
-        return ''.join([letter for letter in self.code_dict.values() if letter in string.ascii_uppercase])
+        """ Returns a string of all letters that are in the code dictionary.
+
+        Args:
+            None.
+
+        Returns:
+            A string of all used letters.
+        """
+        return ''.join([letter for letter in self.code_dict.values() 
+                            if letter in string.ascii_uppercase])
 
     @property
     def unused_letters(self):
@@ -111,7 +120,8 @@ class Cashbreaker():
         Returns:
             A string of all unused letters.
         """
-        return ''.join([c for c in string.ascii_uppercase if c not in self.code_dict_letters])
+        return ''.join([letter for letter in string.ascii_uppercase 
+                            if letter not in self.code_dict_letters])
 
     @property
     def is_complete(self):
