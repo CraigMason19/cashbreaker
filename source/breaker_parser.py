@@ -3,29 +3,42 @@ import numpy as np
 class BreakerParseError(Exception):
     pass
 
-def parse_prize_block(prize_block):
+def parse_prize_block(block):
     ''' return none by default '''
-    if len(prize_block) > 1:
-        return [int(num_str) for num_str in prize_block[1].split()]
+    if len(block) > 1:
+        return [int(num_str) for num_str in block[1].split()]
 
-def parse_guess_block(guess_block):
+def parse_given_block(block):
     tmp = []
 
-    for guess in guess_block:
+    for given in block:
+        if given[0] == '#':
+            continue
+        else:
+            l = given.split('=')
+            number, letter = int(l[0].strip()), l[1].strip().upper()
+            tmp.append((number, letter))
+
+    return tmp
+
+def parse_guess_block(block):
+    tmp = []
+
+    for guess in block:
         if guess[0] == '#':
             continue
         else:
             l = guess.split('=')
             
             number, letter = int(l[0].strip()), l[1].strip().upper()
-            tmp.append(key, value)
+            tmp.append((number, letter))
 
     return tmp
 
-def parse_grid_block(grid_block, x=15, y=15):
+def parse_grid_block(block, x=15, y=15):
     grid_array = []
 
-    for i, line in enumerate(grid_block):
+    for i, line in enumerate(block):
         if line[0] == '#' or line[0] =='':
             continue
 

@@ -14,7 +14,7 @@ import numpy as np
 from enum import Enum
 
 import en_words
-from breaker_parser import parse_prize_block, parse_grid_block
+from breaker_parser import parse_prize_block, parse_given_block, parse_guess_block, parse_grid_block
 
 
 def array_split(sequence, seperators=[0]):
@@ -36,9 +36,7 @@ class Cashbreaker():
         self.prize_word = None
         self.code_dict = None
         self.given_tuple_list = None
-        self.grid = None
-
-        
+        self.grid = None        
 
         self.reset_code_dict()
 
@@ -57,42 +55,21 @@ class Cashbreaker():
             cb.prize_word = parse_prize_block(block) 
                 
             # Given
-            given_block = blocks[2].split('\n')
-            cb.given_tuple_list = []
+            block = blocks[2].split('\n')
+            cb.given_tuple_list = parse_given_block(block)
 
-            for given in given_block:
-                if given[0] == '#':
-                    continue
-                else:
-                    l = given.split('=')
-                    number, letter = int(l[0].strip()), l[1].strip().upper()
-                    cb.given_tuple_list.append((number, letter))
-
-            cb.reset_code_dict()
+            cb.reset_code_dict() # TODO why here? befor gueesses
 
             # Guess
-            guess_block = blocks[3].split('\n')
-            for guess in guess_block:
-                if guess[0] == '#':
-                    continue
-                else:
-                    l = guess.split('=')
-                    
-                    number, letter = int(l[0].strip()), l[1].strip().upper()
-                    cb.code_dict[number] = letter
-
-            # for k, v in parse_guess_block(block):
-            #     cb.code_dict[k] = v
+            block = blocks[3].split('\n')
+            for k, v in parse_guess_block(block):
+                cb.code_dict[k] = v
 
             # Grid
             block = blocks[4].split('\n')
             cb.grid = parse_grid_block(block)
 
-
-
             self.numeric_words = cb.find_numeric_words()
-
- 
 
         return cb
 

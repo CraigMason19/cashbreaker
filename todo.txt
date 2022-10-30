@@ -25,6 +25,8 @@ cashbreaker
 	call find words once at start
 		def do(word_list)		
 
+	try creating one and using it without filling it from file.
+
 en_words.py
 	- in potential words
 		- double letters?
