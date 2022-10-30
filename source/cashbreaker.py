@@ -14,6 +14,8 @@ import numpy as np
 from enum import Enum
 
 import en_words
+from breaker_parser import parse_prize_block, parse_grid_block
+
 
 def array_split(sequence, seperators=[0]):
     chunk = []
@@ -51,9 +53,8 @@ class Cashbreaker():
             blocks = content.split('\n\n')
             
             # Prize
-            prize_block = blocks[BlockType.Prize.value].split('\n')
-            if len(prize_block) > 1:
-                cb.prize_word = [int(num_str) for num_str in prize_block[1].split()]
+            block = blocks[BlockType.Prize.value].split('\n')
+            cb.prize_word = parse_prize_block(block) 
                 
             # Given
             given_block = blocks[2].split('\n')
@@ -80,18 +81,18 @@ class Cashbreaker():
                     number, letter = int(l[0].strip()), l[1].strip().upper()
                     cb.code_dict[number] = letter
 
-            # Grid
-            grid_block = blocks[4].split('\n')
-            grid_array = []
+            # for k, v in parse_guess_block(block):
+            #     cb.code_dict[k] = v
 
-            for line in grid_block:
-                if line[0] == '#' or line[0] =='':
-                    continue
-                else:
-                    grid_array.append([int(num_str) for num_str in line.split()])
-            
-            cb.grid = np.array(grid_array)
+            # Grid
+            block = blocks[4].split('\n')
+            cb.grid = parse_grid_block(block)
+
+
+
             self.numeric_words = cb.find_numeric_words()
+
+ 
 
         return cb
 

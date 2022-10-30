@@ -1,3 +1,6 @@
+Structure
+	Words and dict should be in it's own folder. Link in how?
+
 test empty cash breaker
 	repr
 

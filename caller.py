@@ -1,5 +1,6 @@
 import os 
 import pathlib
+import traceback
 import string
 
 import numpy as np
@@ -8,9 +9,14 @@ from cashbreaker import Cashbreaker
 from printing import print_cashbreaker
 
 def main():
-    breaker_name = "001.txt"
+    breaker_name = "005.txt"
     project_path = str(pathlib.Path(__file__).parent)
-    cb = Cashbreaker.from_file(project_path + "\\breakers\\" + breaker_name)
+
+    try:
+        cb = Cashbreaker.from_file(project_path + "\\breakers\\" + breaker_name)
+    except Exception:
+        traceback.print_exc()
+        return
 
     redraw = True
  
@@ -18,7 +24,7 @@ def main():
     clear_strings = ["cls", "clear"]
     reset_strings = ["reset", "r"]
     help_strings = ["help", 'h']
-    guess_strings = ["guess", "g", "fill", 'f']
+    guess_strings = ["guess", "g", "fill", 'f', 'solve']
     reload_strings = ["reload"]
     repr_strings = ["repr"]
 
@@ -30,6 +36,8 @@ def main():
         # Process input 
         readline = input().lower()
 
+        #region Commands
+        
         if readline in exit_strings:
             break
         
@@ -72,7 +80,9 @@ def main():
         elif readline in reset_strings:
             cb.reset_code_dict()
             redraw = True
-    
+
+        #endregion
+
         else:
             try:
                 readline = readline.split('=')
@@ -89,7 +99,7 @@ def main():
                         number = cb.get_grid_number(loc[0], loc[1])
 
                     except IndexError as e:
-                        print(str(e) + "\n")
+                        print(str(e) + "\n", e)
                         parse_success = False
                         redraw = False
 
