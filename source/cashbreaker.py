@@ -117,15 +117,6 @@ class Cashbreaker():
 
     #endregion
 
-
-
-
-    def save_guesses(self):
-        pass
-
-    def reload(self):
-        pass
-
     def find_numeric_words(self):
         numeric_words = []
 
@@ -136,6 +127,30 @@ class Cashbreaker():
                     numeric_words.append(word)
 
         return numeric_words       
+
+    def find_valid_words(self, unknown_word):
+        result = en_words.potential_words(unknown_word)
+
+        # words not with one option, check if now there is one.
+        # why does recipet not go in??
+        potential_words = []
+        for word in result:
+            # Find all guessed letters
+            #
+            # ??anne?
+            # channel
+            # chl
+            # ignore if chl in dict
+            potential_letters = [word[i] for i, x in enumerate(unknown_word) if x in en_words.MISSING_CHARACTERS]
+            
+            # Only accept words that have no missing letters in the dict.
+            if any(letter.upper() in self.code_dict_letters for letter in potential_letters):
+                continue
+            else:
+                potential_words.append(word)
+
+        return potential_words
+
 
     def guess(self):
         ''' Try to guess words '''
@@ -155,8 +170,12 @@ class Cashbreaker():
             # Get all potential matches
             result = en_words.potential_words(''.join(alpha_word)) 
  
-            # For each potential match, only allow words with letterns not in the code_dict
-            result = [word for word in result if any(letter not in self.code_dict.values() for letter in word.upper())]
+            # For each potential match, only allow words with letters not in the code_dict
+            # result = [word for word in result if any(letter not in self.code_dict.values() for letter in word.upper())]
+            alpha_word = ''.join(alpha_word)
+            result = self.find_valid_words(alpha_word)
+
+
 
             # Success!
             if len(result) == 1:
@@ -170,6 +189,43 @@ class Cashbreaker():
                 self.guess()
 
         return words_found
+
+    def all_guesses(self, limit=10):
+        ''' Try to guess words '''
+        # No words to find
+        if self.is_complete:
+            return False
+
+        words = []
+  
+        for numeric_word in self.find_numeric_words():
+            alpha_word = [self.code_dict[letter] for letter in numeric_word]
+
+            # Already solved
+            if '_' not in alpha_word:
+                continue
+
+            # Get all potential matches
+            # result = en_words.potential_words(''.join(alpha_word)) 
+            # result = [word for word in result if any(letter not in self.code_dict.values() for letter in word.upper())]
+
+            alpha_word = ''.join(alpha_word)
+            result = self.find_valid_words(alpha_word)
+
+            # result = self.find_valid_words(unknown_word)
+
+            if len(result) > limit:
+                result = result[0:limit] + ["..."]
+            
+            words.append([alpha_word] + result)
+            # words.(result[1:limit+1])
+
+
+        return words
+
+
+
+
 
 
     def reset_code_dict(self):

@@ -6,12 +6,16 @@
 	],
 
 	"settings": {
-		//"python.defaultInterpreterPath": "${workspaceFolder}/.env/Scripts/python.exe",
+		"python.defaultInterpreterPath": "${workspaceFolder}/.virtualenv/Scripts/python.exe",
+		// "python.venvPath": "${workspaceFolder}/.virtualenv/Scripts/python.exe",
 		"terminal.integrated.env.windows": 
 		{
 			"PYTHONPATH": ".;./source;"
 		},
-							
+		
+		"python.terminal.activateEnvironment": true,
+
+  		
 
 		"python.autoComplete.extraPaths": [
 			"./source",

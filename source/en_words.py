@@ -145,20 +145,37 @@ def spelling_bee(inner_letter, outer_letters):
 def wordle():
     ''' https://www.nytimes.com/games/wordle/index.html '''
 
-    word = 'exi??'
-    ignore = ''
-    include = ''
+    word = 'bel?e'
+    ignore = 'strncoughxacdwt'
+    include = 'el'
 
     words = potential_words(word, ignore, include)
     print(f'Wordle: {word}, count: {len(words)}')
     print(words)
     print()
 
+def polygon(inner_letter, outer_letters):
+    ''' Game from The Times newspaper'''
+
+    def contains_central_letter(word):
+        # return word.find(inner_letter.lower()) == 1
+        return (inner_letter.lower() in word)
+
+    letters = outer_letters.lower() + inner_letter.lower()
+    
+    p = words_from_letters(letters, min_len=9, max_len=9, remove_doubles=False)
+    p = [word for word in p if contains_central_letter(word)]
+
+    print(f'Polygon: ({inner_letter.lower()}, {outer_letters.lower()})')
+    print(p)
+    print("")
+
 #endregion
 
 def play_games():
     spelling_bee('f', 'eltbad')
     wordle()
+    polygon('F', 'lretgure')
 
 def main():
     # create_sorted_dict()

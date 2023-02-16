@@ -8,13 +8,9 @@ caller
 	commands
 		Save guesses
 		full_guess / full / all_words -> print a list of all the potential words for each word 
+			need word location start
 		
- 
-
-		BUG!!!!
-			100,100=_
-			Index out of greater range: (100, 100)
-			Can't assign to empty space
+		word=0?bso?lete -> gives suggestions
 
 		
 

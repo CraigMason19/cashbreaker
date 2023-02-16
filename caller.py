@@ -7,9 +7,10 @@ import numpy as np
 
 from cashbreaker import Cashbreaker
 from printing import print_cashbreaker
+from en_words import potential_words
 
 def main():
-    breaker_name = "005.txt"
+    breaker_name = "007.txt"
     project_path = str(pathlib.Path(__file__).parent)
 
     try:
@@ -25,6 +26,7 @@ def main():
     reset_strings = ["reset", "r"]
     help_strings = ["help", 'h']
     guess_strings = ["guess", "g", "fill", 'f', 'solve']
+    all_strings = ['all', 'a']
     reload_strings = ["reload"]
     repr_strings = ["repr"]
 
@@ -73,6 +75,21 @@ def main():
                     print("No definite answers found\n")
                     redraw = False
 
+
+        # TODO
+        elif readline in all_strings:
+            if cb.is_complete:
+                print("Cashbreaker is complete!\n")
+                redraw = False
+            else:
+                x = cb.all_guesses()[1:]
+                for _ in x:
+                    print(_[0])
+                    print(f"\t{_[1:]}")
+                    redraw = False
+
+
+
         elif readline in repr_strings:
             print(f'__repr__ == {cb}\n')
             redraw = False
@@ -102,6 +119,38 @@ def main():
                         print(str(e) + "\n", e)
                         parse_success = False
                         redraw = False
+
+
+                # e.g. word=c?osmos
+                elif readline[0] == 'w':
+                    clue = readline[1]
+
+                    result = cb.find_valid_words(clue)
+                    # # result = [word for word in result if any(letter not in cb.code_dict.values() for letter in word.upper())]
+  
+
+                    # # words not with one option, check if now there is one.
+                    # # why does recipet not go in??
+                    # p_words = []
+                    # for word in result:
+                    #     # Find all guessed letters
+                    #     #
+                    #     # ??anne?
+                    #     # channel
+                    #     # chl
+                    #     potential_letters = [word[i] for i, x in enumerate(foo) if x == '?']
+
+                    #     # Only accept words that have no missing letters in the dict.
+                    #     if any(letter.upper() in cb.code_dict_letters for letter in potential_letters):
+                    #         continue
+                    #     else:
+                    #         p_words.append(word)
+
+
+                    print(result)
+                    print('\n')
+                    redraw = False
+
 
                 # e.g. 1=g
                 else:
