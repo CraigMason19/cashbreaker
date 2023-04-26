@@ -2,7 +2,7 @@
 	"folders": [
 		{
 			"path": "."
-		}
+		},
 	],
 
 	"settings": {
@@ -21,6 +21,11 @@
 			"./source",
 		],
 
-		"python.linting.pylintArgs": ["--init-hook"]
+		"python.linting.pylintArgs": [
+			"--init-hook"
+		],
+		"python.analysis.extraPaths": [
+			"./source"
+		]
 	},
 }

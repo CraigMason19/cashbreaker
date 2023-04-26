@@ -125,60 +125,8 @@ def words_from_letters(letters, min_len=3, max_len=6, remove_doubles=False):
     return(l)
 
 
-#region word_games
-
-def spelling_bee(inner_letter, outer_letters):
-    ''' https://spellingbeegame.org '''
-    def contains_central_letter(word):
-        # return word.find(inner_letter.lower()) == 1
-        return (inner_letter.lower() in word)
-
-    letters = outer_letters.lower() + inner_letter.lower()
-    
-    sb = words_from_letters(letters, min_len=4, max_len=None, remove_doubles=False)
-    sb = [word for word in sb if contains_central_letter(word)]
-
-    print(f'Spelling Bee: ({inner_letter.lower()}, {outer_letters.lower()}), count: {len(sb)}')
-    print(sb)
-    print("")
-
-def wordle():
-    ''' https://www.nytimes.com/games/wordle/index.html '''
-
-    word = 'bel?e'
-    ignore = 'strncoughxacdwt'
-    include = 'el'
-
-    words = potential_words(word, ignore, include)
-    print(f'Wordle: {word}, count: {len(words)}')
-    print(words)
-    print()
-
-def polygon(inner_letter, outer_letters):
-    ''' Game from The Times newspaper'''
-
-    def contains_central_letter(word):
-        # return word.find(inner_letter.lower()) == 1
-        return (inner_letter.lower() in word)
-
-    letters = outer_letters.lower() + inner_letter.lower()
-    
-    p = words_from_letters(letters, min_len=9, max_len=9, remove_doubles=False)
-    p = [word for word in p if contains_central_letter(word)]
-
-    print(f'Polygon: ({inner_letter.lower()}, {outer_letters.lower()})')
-    print(p)
-    print("")
-
-#endregion
-
-def play_games():
-    spelling_bee('f', 'eltbad')
-    wordle()
-    polygon('F', 'lretgure')
-
 def main():
-    # create_sorted_dict()
+    # create_sorted_dict() 
 
     print(word_count_in_dic()) # 194433
 
@@ -186,8 +134,6 @@ def main():
     # wol = words_of_length(4)
     # print(wol)
 
-
-    play_games() 
 
 if __name__ == '__main__':
     main()

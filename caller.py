@@ -10,7 +10,7 @@ from printing import print_cashbreaker
 from en_words import potential_words
 
 def main():
-    breaker_name = "007.txt"
+    breaker_name = "008.txt"
     project_path = str(pathlib.Path(__file__).parent)
 
     try:
