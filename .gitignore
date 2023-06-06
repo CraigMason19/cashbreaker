@@ -1,3 +1,4 @@
 .virtualenv/
 source/__pycache__/
 playground.py
+TODO.txt

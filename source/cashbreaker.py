@@ -169,6 +169,18 @@ class Cashbreaker():
     #endregion
 
     def find_numeric_words(self):
+        """ Finds a list of all horizontal and vertical words in the breaker. 
+            These words will be represented in an list containing their 
+            numeric keys in the code dict.
+            
+            e.g. [[13, 18, 8, 2], [11, 5, 25, 1, 18, 24, 9, 3, 21], ...] 
+
+        Args:
+            None.
+                
+        Returns:
+            A list of lists.
+        """
         numeric_words = []
 
         # Loop through rows and columns at the same time
@@ -178,6 +190,37 @@ class Cashbreaker():
                     numeric_words.append(word)
 
         return numeric_words       
+
+    def assign(self, number, letter):
+        """ Assigns a letter to a number in the code dict.
+
+        Args:
+            number:
+                The code dict key.
+            letter:
+                The code dict value.
+                
+        Returns:
+            None.
+        """
+        self.code_dict[number] = letter.upper() 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     def find_valid_words(self, unknown_word):
         result = ew.potential_words(unknown_word)
@@ -201,6 +244,15 @@ class Cashbreaker():
                 potential_words.append(word)
 
         return potential_words
+
+
+
+
+
+
+
+
+
 
 
     def guess(self):
@@ -239,7 +291,24 @@ class Cashbreaker():
 
                 self.guess()
 
+        a = 10
         return words_found
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     def all_guesses(self, limit=10):
         ''' Try to guess words '''
@@ -265,8 +334,8 @@ class Cashbreaker():
 
             # result = self.find_valid_words(unknown_word)
 
-            if len(result) > limit:
-                result = result[0:limit] + ["..."]
+            # if len(result) > limit:
+            #     result = result[0:limit] + ["..."]
             
             words.append([alpha_word] + result)
             # words.(result[1:limit+1])
@@ -279,17 +348,60 @@ class Cashbreaker():
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     def reset_code_dict(self):
+        """ Creates a blank code dictionary where every letter is '_' 
+           (unassigned). Then loads any values that were given in the breaker
+            file.
+
+        Args:
+            None.
+                
+        Returns:
+            None.
+        """
         self.code_dict = dict.fromkeys(range(1, 26+1), "_")
         self.code_dict[0] = '■' 
 
+        # load any values that were given in the breaker file
         if self.given_tuple_list != None:
             for item in self.given_tuple_list:
                 self.code_dict[item[0]] = item[1]
 
 
     def get_grid_number(self, x, y):
-        inverted_shape = self.grid.shape[::-1]
+        """ Returns an int representing the grid coordinates value. Will return 
+            0 if the grid is a blank space.
+
+        Args:
+            x:
+                The x coordinate of the cashbreaker (horizontal).
+            y:
+                The y coordinate of the cashbreaker (vertical).
+                
+        Raises:
+            IndexError:
+                If the x or y index is out of bounds.
+
+        Returns:
+            An int representing the grid coordinates value.
+        """
+        inverted_shape = self.grid.shape[::-1] # the transform
 
         if x < 1 or y < 1:
             raise IndexError(f"Index out of lesser range: {x, y}")
@@ -306,7 +418,10 @@ class Cashbreaker():
             NOTE: __str__ is not defined so __repr__ wil be used on str methods.
 
             Returns a string in the format 'Cashbreaker(name, shape, letters, status)
+            if it has been loaded.
             e.g. 'Cashbreaker('001.txt', (15, 15), 'WAY', Incomplete)'
+
+            Otherwise returns 'Cashbreaker()' 
 
         Args:
             None.

@@ -10,7 +10,7 @@ from printing import print_cashbreaker
 from en_words import potential_words
 
 def main():
-    breaker_name = "003.txt"
+    breaker_name = "009.txt"
     project_path = str(pathlib.Path(__file__).parent)
 
     try:
@@ -82,10 +82,11 @@ def main():
                 print("Cashbreaker is complete!\n")
                 redraw = False
             else:
-                x = cb.all_guesses()[1:]
-                for _ in x:
-                    print(_[0])
-                    print(f"\t{_[1:]}")
+                all_guesses = cb.all_guesses()
+                for guess in all_guesses:
+                    
+                    print(f'{guess[0]} -> ({len(guess[1:])})')
+                    print(f"\t{guess[1:10]}")
                     redraw = False
 
 
@@ -163,11 +164,11 @@ def main():
                             print("Can't assign to empty space\n")
                             redraw = False
 
-                        elif letter != "_" and letter in cb.code_dict_letters:
+                        elif letter != "_" and letter in cb.used_letters:
                             print("Letter already in use, please unassign it first '_'\n")
                             redraw = False
                         else:
-                            cb.code_dict[number] = letter
+                            cb.assign(number, letter)  
                             redraw = True
                     else:
                         print("Letter not valid. Please us a-z, A-Z or '_'\n")
