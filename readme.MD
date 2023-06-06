@@ -12,3 +12,4 @@ Also requires numpy 1.23.2.
 Various commands are accepted to use the program in the console. These are
 
 ## Screenshots
+![solved_breaker_5](https://github.com/CraigMason19/cashbreaker/blob/master/screenshots/solved_breaker_5.png?raw=true)
