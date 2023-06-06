@@ -314,6 +314,9 @@ class Cashbreaker():
         Returns:
             A string representing the cashbreaker.
         """
+        if self.filename == None:
+            return 'Cashbreaker()'
+
         breaker_name = os.path.basename(self.filename)
         status = 'Complete' if self.is_complete else 'Incomplete'
         

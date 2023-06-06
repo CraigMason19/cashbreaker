@@ -9,7 +9,22 @@ Also requires numpy 1.23.2.
 
 ## Usage
 
-Various commands are accepted to use the program in the console. These are
+Run the caller.py script to run the program.
+
+Various commands are accepted to use the program in the console. These are...
+
+```python
+Assign letter to number -> (number)=(letter)
+Assign letter to location -> (x),(y)=(letter)
+
+Exit -> ['close', 'c', 'exit', 'e']
+Clear screen -> ['cls', 'clear']
+Reset -> ['reset', 'r']
+Close -> ['close', 'c', 'exit', 'e']
+Guess words -> ['guess', 'g', 'fill', 'f', 'solve']
+Reload -> ['reload']
+Show representation -> ['repr']
+```
 
 ## Screenshots
 ![solved_breaker_5](https://github.com/CraigMason19/cashbreaker/blob/master/screenshots/solved_breaker_5.png?raw=true)
