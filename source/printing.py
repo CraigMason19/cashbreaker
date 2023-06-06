@@ -3,11 +3,18 @@ import string
 # region pretty printing
 
 def print_prize_code(cashbreaker):
-    """
-    Prize:
-    20 13  1 23  4  6
-    P  L  A  N  E  T
+    """ Prints the prize code in a nicer way in the terminal. E.g.
 
+        Prize:
+        20 13  1 23 4  6
+        P  L  A  N  E  T
+
+    Args:
+        cashbreaker:
+            A Cashbreaker Class.
+            
+    Returns:
+        None.
     """
     print("Prize:")
 
@@ -25,16 +32,44 @@ def print_prize_code(cashbreaker):
     print("")
 
 def print_unused_letters(cashbreaker):
-        print("Unused letters:")
+    """ Prints the unused letters in a nicer way in the terminal. E.g.
 
-        if len(cashbreaker.unused_letters) == 0:
-            print("  N/A")
-        else:
-            print(f"  {' '.join(cashbreaker.unused_letters)}")
-        
-        print("")
+        Unused letters:
+            A B C D E F G ...
+
+    Args:
+        cashbreaker:
+            A Cashbreaker Class.
+            
+    Returns:
+        None.
+    """
+    print("Unused letters:")
+
+    if len(cashbreaker.unused_letters) == 0:
+        print("  N/A")
+    else:
+        print(f"  {' '.join(cashbreaker.unused_letters)}")
+    
+    print("")
 
 def print_code(cashbreaker):
+    """ Prints the code dict in a nicer way in the terminal. E.g.
+
+        Code Table:
+        1  2  3  4  5  6  7  8  9 10 11 12 13
+        V  T  A  H  N  G  O  B  S  K  U  P  D
+
+        14 15 16 17 18 19 20 21 22 23 24 25 26
+        Y  W  J  X  E  Q  Z  L  M  F  R  I  C
+
+    Args:
+        cashbreaker:
+            A Cashbreaker Class.
+            
+    Returns:
+        None.
+    """
     key_list = list(cashbreaker.code_dict.keys())
     value_list = [str(v) for v in cashbreaker.code_dict.values()]
 
@@ -56,6 +91,17 @@ def print_code(cashbreaker):
     print("")
 
 def print_grid(cashbreaker):
+    """ Prints the grid in a nicer way in the terminal. 
+    
+        Prints the grid with numbers on the side and on the top.
+
+    Args:
+        cashbreaker:
+            A Cashbreaker Class.
+            
+    Returns:
+        None.
+    """
     x, y = cashbreaker.grid.shape
 
     table_data = [
@@ -73,10 +119,10 @@ def print_grid(cashbreaker):
 
     print("")
 
-def print_cashbreaker(cb):
-    print_prize_code(cb)  
-    print_unused_letters(cb)
-    print_code(cb)
-    print_grid(cb)
+def print_cashbreaker(cashbreaker):
+    print_prize_code(cashbreaker)  
+    print_unused_letters(cashbreaker)
+    print_code(cashbreaker)
+    print_grid(cashbreaker)
 
 #endregion

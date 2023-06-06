@@ -218,6 +218,9 @@ class Cashbreaker():
 
 
 
+    # For each potential match, only allow words with letters not in the code_dict
+    # result = [word for word in result if any(letter not in self.code_dict.values() for letter in word.upper())]
+    
 
 
 
@@ -255,46 +258,45 @@ class Cashbreaker():
 
 
 
-    def guess(self):
-        ''' Try to guess words '''
-        # No words to find
+
+    def _numeric_word_to_string(self, numeric_word):
+        return ''.join([self.code_dict[letter] for letter in numeric_word])
+
+
+
+
+
+
+
+    def solve(self):
+        """
+        """
         if self.is_complete:
             return False
 
-        words_found = False
+        word_was_found = False
   
         for numeric_word in self.find_numeric_words():
-            alpha_word = [self.code_dict[letter] for letter in numeric_word]
+            string_word = self._numeric_word_to_string(numeric_word)
 
             # Already solved
-            if '_' not in alpha_word:
+            if '_' not in string_word:
                 continue
 
-            # Get all potential matches
-            result = ew.potential_words(''.join(alpha_word)) 
- 
-            # For each potential match, only allow words with letters not in the code_dict
-            # result = [word for word in result if any(letter not in self.code_dict.values() for letter in word.upper())]
-            alpha_word = ''.join(alpha_word)
-            result = self.find_valid_words(alpha_word)
-
-
+            result = self.find_valid_words(string_word)
 
             # Success!
             if len(result) == 1:
-                words_found = True
+                word_was_found = True
                 
-                # Update all letters in the dict
-                # TODO only update missing letters?
+                # Update all new letters in the dict
                 for i, code in enumerate(numeric_word):
-                    self.code_dict[code] = result[0][i].upper()                     
+                    if self.code_dict[code] == '_':
+                        self.code_dict[code] = result[0][i].upper()                     
 
-                self.guess()
+                self.solve()
 
-        a = 10
-        return words_found
-
-
+        return word_was_found
 
 
 
@@ -310,37 +312,27 @@ class Cashbreaker():
 
 
 
-    def all_guesses(self, limit=10):
-        ''' Try to guess words '''
-        # No words to find
+
+
+    def all_potentials(self):
+        """
+        """
         if self.is_complete:
             return False
 
         words = []
   
         for numeric_word in self.find_numeric_words():
-            alpha_word = [self.code_dict[letter] for letter in numeric_word]
+            string_word = self._numeric_word_to_string(numeric_word)
 
             # Already solved
-            if '_' not in alpha_word:
+            if '_' not in string_word:
                 continue
 
-            # Get all potential matches
-            # result = en_words.potential_words(''.join(alpha_word)) 
-            # result = [word for word in result if any(letter not in self.code_dict.values() for letter in word.upper())]
+            result = self.find_valid_words(string_word)
 
-            alpha_word = ''.join(alpha_word)
-            result = self.find_valid_words(alpha_word)
-
-            # result = self.find_valid_words(unknown_word)
-
-            # if len(result) > limit:
-            #     result = result[0:limit] + ["..."]
-            
-            words.append([alpha_word] + result)
-            # words.(result[1:limit+1])
-
-
+            words.append([string_word] + result)
+    
         return words
 
 

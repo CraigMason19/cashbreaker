@@ -27,6 +27,7 @@ def main():
     help_strings = ["help", 'h']
     guess_strings = ["guess", "g", "fill", 'f', 'solve']
     all_strings = ['all', 'a']
+    all_order_strings = [ 'all order', 'ao']
     reload_strings = ["reload"]
     repr_strings = ["repr"]
 
@@ -69,25 +70,41 @@ def main():
                 print("Cashbreaker is complete!\n")
                 redraw = False
             else:
-                if(cb.guess()):
+                if(cb.solve()):
                     redraw = True
                 else:
                     print("No definite answers found\n")
                     redraw = False
 
 
-        # TODO
-        elif readline in all_strings:
+        # List all potential answers
+        elif readline in all_strings + all_order_strings:
             if cb.is_complete:
                 print("Cashbreaker is complete!\n")
-                redraw = False
             else:
-                all_guesses = cb.all_guesses()
-                for guess in all_guesses:
-                    
-                    print(f'{guess[0]} -> ({len(guess[1:])})')
-                    print(f"\t{guess[1:10]}")
-                    redraw = False
+                all_potentials = cb.all_potentials()
+                total_potentials = 0
+
+
+                if readline in all_order_strings:
+                    all_potentials.sort(key=len)
+
+
+
+                for guess in all_potentials:
+                    length_of_potentials = len(guess[1:])
+                    total_potentials += length_of_potentials
+
+                    print(f'{guess[0]} ({length_of_potentials} potentials)')
+
+                    if length_of_potentials > 10:
+                        print(f"\t{guess[1:10+1]}...")
+                    else:
+                        print(f"\t{guess[1:]}")
+
+                print(f"{total_potentials} total potentials")
+                redraw = False
+
 
 
 
@@ -127,6 +144,9 @@ def main():
                     clue = readline[1]
 
                     result = cb.find_valid_words(clue)
+                    # en_words potentials as all as opposed to valid cashbreaker ones???
+
+
                     # # result = [word for word in result if any(letter not in cb.code_dict.values() for letter in word.upper())]
   
 
