@@ -3,6 +3,12 @@ import string
 # region pretty printing
 
 def print_prize_code(cashbreaker):
+    """
+    Prize:
+    20 13  1 23  4  6
+    P  L  A  N  E  T
+
+    """
     print("Prize:")
 
     if cashbreaker.prize_word == None:

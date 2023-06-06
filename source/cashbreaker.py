@@ -1,37 +1,80 @@
-# https://www.crosswordsolver.org
-
-# To run from command prompt
-#   type 'cmd' in search box in win 10
-#   path in quotes "C:\Users\Craig\Google Drive\Programming & Tech\Python\Python Experiments\Cashbreaker"
-#   python cashbreaker.py
+#-------------------------------------------------------------------------------
+# Name:        cashbreaker.py
 #
-#   cd "C:\Users\Craig\Google Drive\Programming & Tech\Python\Python Experiments\Cashbreaker"
-#   python cashbreaker.py
+# Notes:       A class to help me solve the cashbreakers in the UK puzzle 
+#              magazines. (Because I hate doing them!)
+#
+# Links:        
+#
+# TODO:        
+#
+#-------------------------------------------------------------------------------
 
 import os
 import string 
-import numpy as np
 from enum import Enum
 
-import en_words
-from breaker_parser import parse_prize_block, parse_given_block, parse_guess_block, parse_grid_block
+import numpy as np
 
+import en_words as ew
+import breaker_parser as bp
 
-def array_split(sequence, seperators=[0]):
+def array_split_gen(sequence, seperators=[0]):
+    """ A generator that yields an array into sub-arrays.
+        E.g. for _ in array_split_gen([2,3,4,5,0,6,7,0,8,9,10,0,11,12], [0]):
+                print(_)
+
+                [2, 3, 4, 5]
+                [6, 7]    
+                [8, 9, 10]
+                [11, 12]
+
+    Args:
+        sequence:
+            The array to be split up.
+        seperators:
+            An array of seperators to split on.
+
+    Returns:
+        A generator.
+    """
     chunk = []
+
     for val in sequence:
         if val in seperators:
             yield chunk
             chunk = []
         else:
             chunk.append(val)
+
     yield chunk
 
 class BlockType(Enum):
+    """ A enum describing the data for loading cashbreakers from a file. 
+
+    Attributes:
+        type attributes:
+            5 class attributes representing a Enum.
+    """
     (Comment, Prize, Given, Guess, Grid) = range(5)
 
 class Cashbreaker():
+    """
+    
+    
+    TODO: Implement
+    
+    
+    """
     def __init__(self):
+        """ A class representing a cashbreaker found in UK puzzle magazines.
+
+        Args:
+            None.
+
+        Returns:
+            None.
+        """  
         self.filename = None
         self.prize_word = None
         self.code_dict = None
@@ -42,41 +85,49 @@ class Cashbreaker():
 
     @classmethod
     def from_file(self, filename):
+        """ A class method to load a cashbreaker from a text file. 
+
+        Args:
+            filename:
+                The text file to load.
+
+        Returns:
+            A Cashbreaker class.
+        """
         cb = Cashbreaker()
         cb.filename = filename
-
-        # region I/O
+        
         with open(filename, 'r') as f:
             content = f.read()
             blocks = content.split('\n\n')
             
             # Prize
             block = blocks[BlockType.Prize.value].split('\n')
-            cb.prize_word = parse_prize_block(block) 
+            cb.prize_word = bp.parse_prize_block(block) 
                 
             # Given
-            block = blocks[2].split('\n')
-            cb.given_tuple_list = parse_given_block(block)
+            block = blocks[BlockType.Given.value].split('\n')
+            cb.given_tuple_list = bp.parse_given_block(block)
 
-            cb.reset_code_dict() # TODO why here? befor gueesses
+            cb.reset_code_dict() 
 
             # Guess
-            block = blocks[3].split('\n')
-            for k, v in parse_guess_block(block):
+            block = blocks[BlockType.Guess.value].split('\n')
+            for k, v in bp.parse_guess_block(block):
                 cb.code_dict[k] = v
 
             # Grid
-            block = blocks[4].split('\n')
-            cb.grid = parse_grid_block(block)
+            block = blocks[BlockType.Grid.value].split('\n')
+            cb.grid = bp.parse_grid_block(block)
 
-            self.numeric_words = cb.find_numeric_words()
+            self.numeric_words = cb.find_numeric_words() 
 
         return cb
 
     #region properties
 
     @property
-    def code_dict_letters(self):
+    def used_letters(self):
         """ Returns a string of all letters that are in the code dictionary.
 
         Args:
@@ -99,7 +150,7 @@ class Cashbreaker():
             A string of all unused letters.
         """
         return ''.join([letter for letter in string.ascii_uppercase 
-                            if letter not in self.code_dict_letters])
+                            if letter not in self.used_letters])
 
     @property
     def is_complete(self):
@@ -122,14 +173,14 @@ class Cashbreaker():
 
         # Loop through rows and columns at the same time
         for line in [*self.grid, *self.grid.T]:
-            for word in array_split(line):
+            for word in array_split_gen(line):
                 if len(word) > 2:
                     numeric_words.append(word)
 
         return numeric_words       
 
     def find_valid_words(self, unknown_word):
-        result = en_words.potential_words(unknown_word)
+        result = ew.potential_words(unknown_word)
 
         # words not with one option, check if now there is one.
         # why does recipet not go in??
@@ -141,10 +192,10 @@ class Cashbreaker():
             # channel
             # chl
             # ignore if chl in dict
-            potential_letters = [word[i] for i, x in enumerate(unknown_word) if x in en_words.MISSING_CHARACTERS]
+            potential_letters = [word[i] for i, x in enumerate(unknown_word) if x in ew.MISSING_CHARACTERS]
             
             # Only accept words that have no missing letters in the dict.
-            if any(letter.upper() in self.code_dict_letters for letter in potential_letters):
+            if any(letter.upper() in self.used_letters for letter in potential_letters):
                 continue
             else:
                 potential_words.append(word)
@@ -168,7 +219,7 @@ class Cashbreaker():
                 continue
 
             # Get all potential matches
-            result = en_words.potential_words(''.join(alpha_word)) 
+            result = ew.potential_words(''.join(alpha_word)) 
  
             # For each potential match, only allow words with letters not in the code_dict
             # result = [word for word in result if any(letter not in self.code_dict.values() for letter in word.upper())]
@@ -266,19 +317,4 @@ class Cashbreaker():
         breaker_name = os.path.basename(self.filename)
         status = 'Complete' if self.is_complete else 'Incomplete'
         
-        return f'Cashbreaker({breaker_name}, {self.grid.T.shape}, {self.code_dict_letters}, {status})'
-        
- 
-
-
-
-
-
-
-
-
- 
-
-
- 
- 
+        return f'Cashbreaker({breaker_name}, {self.grid.T.shape}, {self.used_letters}, {status})'

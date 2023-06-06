@@ -10,7 +10,7 @@ from printing import print_cashbreaker
 from en_words import potential_words
 
 def main():
-    breaker_name = "008.txt"
+    breaker_name = "005.txt"
     project_path = str(pathlib.Path(__file__).parent)
 
     try:
@@ -141,7 +141,7 @@ def main():
                     #     potential_letters = [word[i] for i, x in enumerate(foo) if x == '?']
 
                     #     # Only accept words that have no missing letters in the dict.
-                    #     if any(letter.upper() in cb.code_dict_letters for letter in potential_letters):
+                    #     if any(letter.upper() in cb.used_letters for letter in potential_letters):
                     #         continue
                     #     else:
                     #         p_words.append(word)
