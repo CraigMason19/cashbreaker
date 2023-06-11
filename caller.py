@@ -70,7 +70,7 @@ def main():
                 print("Cashbreaker is complete!\n")
                 redraw = False
             else:
-                if(cb.solve()):
+                if(cb.guess()):
                     redraw = True
                 else:
                     print("No definite answers found\n")

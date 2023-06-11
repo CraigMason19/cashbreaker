@@ -205,42 +205,42 @@ class Cashbreaker():
         """
         self.code_dict[number] = letter.upper() 
 
+    def _numeric_word_to_string(self, numeric_word):
+        """ Converts a numeric word into a string containing the characters in 
+            the code dict.
 
+            E.g. [23, 17, 5] -> 'dog'
 
-
-
-
-
-
-
-
-
-
-
-
-    # For each potential match, only allow words with letters not in the code_dict
-    # result = [word for word in result if any(letter not in self.code_dict.values() for letter in word.upper())]
-    
-
-
-
+        Args:
+            numeric_word:
+                A list of numbers representing a word.
+                
+        Returns:
+            A string.
+        """
+        return ''.join([self.code_dict[letter] for letter in numeric_word])
 
     def find_valid_words(self, unknown_word):
-        result = ew.potential_words(unknown_word)
+        """ Finds all words that have the potential to be considered as a 
+            solution.
 
-        # words not with one option, check if now there is one.
-        # why does recipet not go in??
+        Args:
+            unknown_word:
+                A word with some letters missing.
+                
+        Returns:
+            A list of words.
+        """
         potential_words = []
-        for word in result:
-            # Find all guessed letters
-            #
+
+        for word in ew.potential_words(unknown_word):
+            # Get each of the missing letters. E.g.
             # ??anne?
             # channel
             # chl
-            # ignore if chl in dict
             potential_letters = [word[i] for i, x in enumerate(unknown_word) if x in ew.MISSING_CHARACTERS]
             
-            # Only accept words that have no missing letters in the dict.
+            # Ignore if any of these letters are in the code dict.
             if any(letter.upper() in self.used_letters for letter in potential_letters):
                 continue
             else:
@@ -248,28 +248,17 @@ class Cashbreaker():
 
         return potential_words
 
+    def guess(self):
+        """ Recursively finds words with only ne match until the puzzle is solved.
 
+            Solve will return True if any number of words were found, return False
+            if no word could be exactly placed.
 
-
-
-
-
-
-
-
-
-
-    def _numeric_word_to_string(self, numeric_word):
-        return ''.join([self.code_dict[letter] for letter in numeric_word])
-
-
-
-
-
-
-
-    def solve(self):
-        """
+        Args:
+            None.
+                
+        Returns:
+            A bool determining if any word was found.
         """
         if self.is_complete:
             return False
@@ -294,28 +283,21 @@ class Cashbreaker():
                     if self.code_dict[code] == '_':
                         self.code_dict[code] = result[0][i].upper()                     
 
-                self.solve()
+                self.guess()
 
         return word_was_found
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     def all_potentials(self):
-        """
+        """ Returns a list of all potential matches for a unknown word in the 
+            cashbreaker.
+
+        Args:
+            None.
+                
+        Returns:
+            A list of words.
+
+            NOTE: word[0] will be the word containing the missing characters.
         """
         if self.is_complete:
             return False
@@ -334,27 +316,6 @@ class Cashbreaker():
             words.append([string_word] + result)
     
         return words
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     def reset_code_dict(self):
         """ Creates a blank code dictionary where every letter is '_' 
