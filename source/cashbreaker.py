@@ -50,7 +50,7 @@ def array_split_gen(sequence, seperators=[0]):
     yield chunk
 
 class BlockType(Enum):
-    """ A enum describing the data for loading cashbreakers from a file. 
+    """ A enum describing the data blocks for loading cashbreakers from a file. 
 
     Attributes:
         type attributes:
@@ -184,7 +184,7 @@ class Cashbreaker():
         numeric_words = []
 
         # Loop through rows and columns at the same time
-        for line in [*self.grid, *self.grid.T]:
+        for line in [*self.grid, *self.grid.T]: # T is transpose
             for word in array_split_gen(line):
                 if len(word) > 2:
                     numeric_words.append(word)
@@ -205,7 +205,7 @@ class Cashbreaker():
         """
         self.code_dict[number] = letter.upper() 
 
-    def _numeric_word_to_string(self, numeric_word):
+    def numeric_word_to_string(self, numeric_word):
         """ Converts a numeric word into a string containing the characters in 
             the code dict.
 
@@ -244,15 +244,16 @@ class Cashbreaker():
             if any(letter.upper() in self.used_letters for letter in potential_letters):
                 continue
             else:
-                potential_words.append(word)
+                potential_words.append(word.lower()) # Easier to read lowercase
 
         return potential_words
 
     def guess(self):
-        """ Recursively finds words with only ne match until the puzzle is solved.
+        """ Recursively finds words with only one match until the puzzle is 
+            solved.
 
-            Solve will return True if any number of words were found, return False
-            if no word could be exactly placed.
+            Solve will return True if any number of words were found, return 
+            False if no word could be exactly placed.
 
         Args:
             None.
@@ -266,7 +267,7 @@ class Cashbreaker():
         word_was_found = False
   
         for numeric_word in self.find_numeric_words():
-            string_word = self._numeric_word_to_string(numeric_word)
+            string_word = self.numeric_word_to_string(numeric_word)
 
             # Already solved
             if '_' not in string_word:
@@ -305,7 +306,7 @@ class Cashbreaker():
         words = []
   
         for numeric_word in self.find_numeric_words():
-            string_word = self._numeric_word_to_string(numeric_word)
+            string_word = self.numeric_word_to_string(numeric_word)
 
             # Already solved
             if '_' not in string_word:
