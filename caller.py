@@ -106,14 +106,14 @@ def main():
                     length_of_potentials = len(guess[1:])
                     total_potentials += length_of_potentials
 
-                    print(f'{guess[0]} ({length_of_potentials} potentials)')
+                    print(f'{guess[0]} ({length_of_potentials} potentials)\n')
 
                     if length_of_potentials > 10:
                         print(f"\t{guess[1:10+1]}...")
                     else:
                         print(f"\t{guess[1:]}")
 
-                print(f"{total_potentials} total potentials")
+                print(f"{total_potentials} total potentials\n")
 
             redraw = False
 
@@ -134,6 +134,7 @@ def main():
                             print("No words could be found\n")
                         else:
                             print(result)
+                            print('\n')
                     else:
                         print("Cashbreaker is complete!\n")
 
@@ -147,13 +148,13 @@ def main():
 
                     # e.g. 1,1=s
                     if ',' in readline[0]:
-                        loc = [int(index) for index in readline[0].split(',')]
+                        coords = [int(index) for index in readline[0].split(',')]
 
                         try:
-                            number = cb.get_grid_number(loc[0], loc[1])
+                            number = cb.get_grid_number(*coords)
 
                         except IndexError as e:
-                            print(str(e) + "\n", e)
+                            print(str(e) + "\n")
                             parse_success = False
                             redraw = False
 

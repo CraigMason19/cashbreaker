@@ -9,15 +9,19 @@ Also requires numpy 1.23.2
 
 ## Usage
 
-Run the caller.py script to run the program.  
+Run the caller.py script to run the program.
 
 ##### Console commands
+```Python
 Exit -> ['close', 'c', 'exit', 'e']
 Clear screen -> ['cls', 'clear']
 Reset -> ['reset', 'r']
-Guess words -> ['guess', 'g', 'fill', 'f', 'solve']
-Reload -> ['reload']
 Show representation -> ['repr']
+Show help -> ["help", 'h']
+Guess words / solve -> ['guess', 'g', 'fill', 'f', 'solve', 's']
+All possible words = ['all', 'a']
+All possible words by lowest number of matches = [ 'all order', 'ao']
+```
 
 
 ##### Assign letter to number
@@ -35,6 +39,11 @@ e.g. 5,7=a
 
 # To clear use
 5,7=_
+```
+##### Show potential words
+```python
+w=_at_le  
+['battle', 'cattle', 'pattle', 'rattle', 'tattle', 'wattle']
 ```
 
 ## Screenshots
