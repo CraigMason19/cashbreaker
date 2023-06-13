@@ -24,11 +24,17 @@ Show representation -> ['repr']
 ```python
 (number)=(letter) 
 e.g. 9=a
+
+# To clear use
+9=_
 ```
 ##### Assign letter to location (horizontal then vertical)
 ```python
 (x,y)=(letter) 
 e.g. 5,7=a
+
+# To clear use
+5,7=_
 ```
 
 ## Screenshots

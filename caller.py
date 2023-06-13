@@ -1,13 +1,22 @@
-import os 
+#-------------------------------------------------------------------------------
+# Name:        caller.py
+#
+# Notes:       A console application to interact with a cashbreaker file in the
+#              breakers folder. 
+#
+# Links:        
+#
+# TODO:        
+#
+#-------------------------------------------------------------------------------
+
+import os # For cls 
 import pathlib
 import traceback
 import string
 
-import numpy as np
-
 from cashbreaker import Cashbreaker
 from printing import print_cashbreaker
-from en_words import potential_words
 
 def main():
     breaker_name = "009.txt"
@@ -24,12 +33,11 @@ def main():
     exit_strings = ["close", "c", "exit", "e"]
     clear_strings = ["cls", "clear"]
     reset_strings = ["reset", "r"]
+    repr_strings = ["repr"]
     help_strings = ["help", 'h']
-    guess_strings = ["guess", "g", "fill", 'f', 'solve']
+    guess_strings = ["guess", "g", "fill", 'f', 'solve', 's']
     all_strings = ['all', 'a']
     all_order_strings = [ 'all order', 'ao']
-    reload_strings = ["reload"]
-    repr_strings = ["repr"]
 
     while True:
         if redraw:
@@ -47,21 +55,27 @@ def main():
         elif readline in clear_strings:
             redraw = True
 
-        elif readline in reload_strings:
-            cb = Cashbreaker.from_file(project_path + "\\breakers\\" + breaker_name)
+        elif readline in reset_strings:
+            cb.reset_code_dict()
             redraw = True
+
+        elif readline in repr_strings:
+            print(f'__repr__ == {cb}\n')
+            redraw = False
 
         elif readline in help_strings:
             print(f"  Assign letter to number -> (number)=(letter)")
             print(f"  Assign letter to location -> (x),(y)=(letter)")
+            print(f"  Show potentials for a word -> w=(word)")
             print("")
             print(f"  Exit -> {exit_strings}")
             print(f"  Clear screen -> {clear_strings}")
             print(f"  Reset -> {reset_strings}")
-            print(f"  Close -> {exit_strings}")
-            print(f"  Guess words -> {guess_strings}")
-            print(f"  Reload -> {reload_strings}")
             print(f"  Show representation -> {repr_strings}")
+            print(f"  Guess words -> {guess_strings}")
+            print(f"  Display all words -> {all_strings}")
+            print(f"  Display all words ordered by matches -> {all_order_strings}")
+
             print("\n")
             redraw = False
 
@@ -76,7 +90,6 @@ def main():
                     print("No definite answers found\n")
                     redraw = False
 
-
         # List all potential answers
         elif readline in all_strings + all_order_strings:
             if cb.is_complete:
@@ -85,10 +98,8 @@ def main():
                 all_potentials = cb.all_potentials()
                 total_potentials = 0
 
-
                 if readline in all_order_strings:
                     all_potentials.sort(key=len)
-
 
 
                 for guess in all_potentials:
@@ -103,101 +114,75 @@ def main():
                         print(f"\t{guess[1:]}")
 
                 print(f"{total_potentials} total potentials")
-                redraw = False
 
-
-
-
-        elif readline in repr_strings:
-            print(f'__repr__ == {cb}\n')
             redraw = False
-
-        elif readline in reset_strings:
-            cb.reset_code_dict()
-            redraw = True
 
         #endregion
 
+        #region User input 
+
         else:
             try:
-                readline = readline.split('=')
+                readline = [_.strip() for _ in readline.split('=')]
 
-                number = 0
-                letter = readline[1].upper()
-                parse_success = True
+                # e.g. w=c?osmos
+                if readline[0] == 'w':
+                    if not cb.is_complete:
+                        result = cb.find_valid_words(readline[1])
 
-                # e.g. 1,1=s
-                if ',' in readline[0]:
-                    loc = [int(index) for index in readline[0].split(',')]
+                        if not result:
+                            print("No words could be found\n")
+                        else:
+                            print(result)
+                    else:
+                        print("Cashbreaker is complete!\n")
 
-                    try:
-                        number = cb.get_grid_number(loc[0], loc[1])
-
-                    except IndexError as e:
-                        print(str(e) + "\n", e)
-                        parse_success = False
-                        redraw = False
-
-
-                # e.g. word=c?osmos
-                elif readline[0] == 'w':
-                    clue = readline[1]
-
-                    result = cb.find_valid_words(clue)
-                    # en_words potentials as all as opposed to valid cashbreaker ones???
-
-
-                    # # result = [word for word in result if any(letter not in cb.code_dict.values() for letter in word.upper())]
-  
-
-                    # # words not with one option, check if now there is one.
-                    # # why does recipet not go in??
-                    # p_words = []
-                    # for word in result:
-                    #     # Find all guessed letters
-                    #     #
-                    #     # ??anne?
-                    #     # channel
-                    #     # chl
-                    #     potential_letters = [word[i] for i, x in enumerate(foo) if x == '?']
-
-                    #     # Only accept words that have no missing letters in the dict.
-                    #     if any(letter.upper() in cb.used_letters for letter in potential_letters):
-                    #         continue
-                    #     else:
-                    #         p_words.append(word)
-
-
-                    print(result)
-                    print('\n')
                     redraw = False
 
-
-                # e.g. 1=g
+                # Letter assignment
                 else:
-                    number = int(readline[0])
+                    number = 0
+                    letter = readline[1].upper()
+                    parse_success = True
 
-                if(parse_success):
-                    # Only add valid characters
-                    if letter in (string.ascii_uppercase + "_"):
-                        if number == 0:
-                            print("Can't assign to empty space\n")
+                    # e.g. 1,1=s
+                    if ',' in readline[0]:
+                        loc = [int(index) for index in readline[0].split(',')]
+
+                        try:
+                            number = cb.get_grid_number(loc[0], loc[1])
+
+                        except IndexError as e:
+                            print(str(e) + "\n", e)
+                            parse_success = False
                             redraw = False
 
-                        elif letter != "_" and letter in cb.used_letters:
-                            print("Letter already in use, please unassign it first '_'\n")
-                            redraw = False
-                        else:
-                            cb.assign(number, letter)  
-                            redraw = True
+                    # e.g. 1=g
                     else:
-                        print("Letter not valid. Please us a-z, A-Z or '_'\n")
-                        redraw = False
+                        number = int(readline[0])
+
+                    if(parse_success):
+                        # Only add valid characters
+                        if letter in (string.ascii_uppercase + "_"):
+                            if number == 0:
+                                print("Can't assign to empty space\n")
+                                redraw = False
+
+                            elif letter != "_" and letter in cb.used_letters:
+                                print("Letter already in use, please unassign it first '_'\n")
+                                redraw = False
+                            else:
+                                cb.assign(number, letter)  
+                                redraw = True
+                        else:
+                            print("Letter not valid. Please us a-z, A-Z or '_'\n")
+                            redraw = False
 
             except:
                 print("Unrecognized input, type 'help' for more info\n")
                 redraw = False
 
+        #endregion
 
 if __name__ == "__main__":
     main()
