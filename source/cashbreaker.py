@@ -59,13 +59,57 @@ class BlockType(Enum):
     (Comment, Prize, Given, Guess, Grid) = range(5)
 
 class Cashbreaker():
+    """ Represents a cashbreaker puzzle. 
+    
+        A crossword like grid where each number represents a letter in a code. 
+        Solving every word would reveal a prize word.
+        
+    Attributes:
+        filename:
+            The name of the breaker loaded.
+        prize_word:
+            A list of numbers representing the missing prize word (puzzle answer)
+        code_dict:
+            A dictionary containing the relationship between the letters 
+            and numbers.
+        given_tuple_list:
+            A list of already solved letters given in the puzzle.
+        grid:
+            A numpy grid containing the numbers that make up the puzzle.
+
+    Methods:
+        __init__(self):
+            Initialises an empty cashbreaker. Sets attributes to None.
+        from_file(self, filename):
+            A class method that constructs and returns a new cashbreaker from a 
+            file.
+        used_letters(self):
+            A property that returns the letters already in the cashbreaker.
+        unused_letters(self):
+            A property that returns the letters not in the cashbreaker.
+        is_complete(self):
+            A property showing if the puzzle is solved.
+        find_numeric_word(self):
+            A properter that returns a list of all the words with their numneric
+            values.
+        assign(self, number, letter):
+            Assigns the given number to the given letter.
+        numeric_word_to_letter(self, numberical_word):
+            Converts a numeric word into a word with letters
+        find_valid_words(self, unknown_word):
+            Returns a list of words that have the potential to be valid.
+        guess(self):
+            Recursively looks for words with only 1 potential solution.
+        all_potentials(self):
+            Returns a list of all possible solutions to all unsolved words.
+        reset_code_dict(self):
+            Resets the code dictionary to it's initial state when loaded.
+        get_grid_number(self, x, y):
+            Returns the value in the grid at a certain location.
+        __repr__(self):
+            Returns the state of the cashbreaker.
     """
-    
-    
-    TODO: Implement
-    
-    
-    """
+
     def __init__(self):
         """ A class representing a cashbreaker found in UK puzzle magazines.
 
@@ -119,8 +163,6 @@ class Cashbreaker():
             # Grid
             block = blocks[BlockType.Grid.value].split('\n')
             cb.grid = bp.parse_grid_block(block)
-
-            self.numeric_words = cb.find_numeric_words() 
 
         return cb
 

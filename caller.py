@@ -106,12 +106,12 @@ def main():
                     length_of_potentials = len(guess[1:])
                     total_potentials += length_of_potentials
 
-                    print(f'{guess[0]} ({length_of_potentials} potentials)\n')
+                    print(f'{guess[0]} ({length_of_potentials} potentials)')
 
                     if length_of_potentials > 10:
-                        print(f"\t{guess[1:10+1]}...")
+                        print(f"\t{guess[1:10+1]}...\n")
                     else:
-                        print(f"\t{guess[1:]}")
+                        print(f"\t{guess[1:]}\n")
 
                 print(f"{total_potentials} total potentials\n")
 
